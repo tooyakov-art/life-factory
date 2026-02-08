@@ -5,9 +5,16 @@ import { useFactoryStore } from '@/store/useFactoryStore'
 interface ToolbarProps {
   isKaizenOpen?: boolean
   onKaizenToggle?: () => void
+  isContainersOpen?: boolean
+  onContainersToggle?: () => void
 }
 
-export function Toolbar({ isKaizenOpen, onKaizenToggle }: ToolbarProps) {
+export function Toolbar({
+  isKaizenOpen,
+  onKaizenToggle,
+  isContainersOpen,
+  onContainersToggle,
+}: ToolbarProps) {
   const { editorMode, setEditorMode, togglePalette, isPaletteOpen, saveCurrentSchema } =
     useFactoryStore()
 
@@ -33,6 +40,26 @@ export function Toolbar({ isKaizenOpen, onKaizenToggle }: ToolbarProps) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-30 bg-slate-800/95 backdrop-blur-sm border-t border-slate-700 safe-area-bottom">
       <div className="flex items-center justify-center gap-1 px-2 py-2">
+        {/* Контейнеры */}
+        <button
+          onClick={onContainersToggle}
+          className={`
+            flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-lg
+            transition-all touch-manipulation min-w-15
+            ${
+              isContainersOpen
+                ? 'bg-purple-600/30 text-purple-400'
+                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+            }
+          `}
+        >
+          <span className="text-lg">📦</span>
+          <span className="text-[10px] font-medium">Схемы</span>
+        </button>
+
+        {/* Разделитель */}
+        <div className="w-px h-8 bg-slate-600/50 mx-1" />
+
         {buttons.map((btn) => {
           const isActive =
             editorMode === btn.id || (btn.id === 'addNode' && isPaletteOpen)
