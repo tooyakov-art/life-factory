@@ -49,6 +49,14 @@ export interface FactoryEdgeData {
 export type FactoryNode = Node<FactoryNodeData, 'processNode' | 'schemaNode'>
 export type FactoryEdge = Edge<FactoryEdgeData>
 
+// Канбан-задача
+export interface KanbanTask {
+  id: string
+  title: string
+  status: 'todo' | 'doing' | 'done'
+  createdAt: string
+}
+
 // Схема — одна "фабрика"
 export interface Schema {
   id: string
@@ -57,6 +65,7 @@ export interface Schema {
   category: 'business' | 'finance' | 'skills' | 'life' | 'master'
   nodes: FactoryNode[]
   edges: FactoryEdge[]
+  tasks?: KanbanTask[]
   createdAt: string
   updatedAt: string
 }

@@ -8,7 +8,7 @@ import {
   type OnConnect,
   type Connection,
 } from '@xyflow/react'
-import type { Schema, FactoryNode, FactoryEdge, FactoryNodeData } from '@/types/factory'
+import type { Schema, FactoryNode, FactoryEdge, FactoryNodeData, KanbanTask } from '@/types/factory'
 
 // --- Debounce для автосохранения ---
 let debounceTimer: ReturnType<typeof setTimeout> | null = null
@@ -28,6 +28,7 @@ interface FactoryState {
   activeSchemaId: string | null
   nodes: FactoryNode[]
   edges: FactoryEdge[]
+  tasks: KanbanTask[]
   isLoading: boolean
 
   // React Flow callbacks
@@ -50,6 +51,11 @@ interface FactoryState {
   deleteNode: (nodeId: string) => void
   deleteEdge: (edgeId: string) => void
 
+  // Канбан задачи
+  addTask: (title: string) => void
+  updateTaskStatus: (taskId: string, status: KanbanTask['status']) => void
+  deleteTask: (taskId: string) => void
+
   // Режим редактора
   editorMode: 'pan' | 'addNode' | 'addEdge'
   setEditorMode: (mode: 'pan' | 'addNode' | 'addEdge') => void
@@ -63,6 +69,7 @@ export const useFactoryStore = create<FactoryState>()((set, get) => ({
   activeSchemaId: null,
   nodes: [],
   edges: [],
+  tasks: [],
   isLoading: false,
   editorMode: 'pan',
   isPaletteOpen: false,
@@ -130,18 +137,18 @@ export const useFactoryStore = create<FactoryState>()((set, get) => ({
   setActiveSchema: (id) => {
     const schema = get().schemas.find((s) => s.id === id)
     if (schema) {
-      set({ activeSchemaId: id, nodes: schema.nodes, edges: schema.edges })
+      set({ activeSchemaId: id, nodes: schema.nodes, edges: schema.edges, tasks: schema.tasks || [] })
     }
   },
 
   saveCurrentSchema: async () => {
-    const { activeSchemaId, nodes, edges, schemas } = get()
+    const { activeSchemaId, nodes, edges, tasks, schemas } = get()
     if (!activeSchemaId) return
 
     const schema = schemas.find((s) => s.id === activeSchemaId)
     if (!schema) return
 
-    const updated = { ...schema, nodes, edges }
+    const updated = { ...schema, nodes, edges, tasks }
 
     try {
       const res = await fetch(`/api/schemas/${encodeURIComponent(activeSchemaId)}`, {
@@ -185,6 +192,30 @@ export const useFactoryStore = create<FactoryState>()((set, get) => ({
 
   deleteEdge: (edgeId) => {
     set((state) => ({ edges: state.edges.filter((e) => e.id !== edgeId) }))
+    scheduleSave()
+  },
+
+  // --- Канбан ---
+  addTask: (title) => {
+    const task: KanbanTask = {
+      id: `task-${Date.now()}`,
+      title,
+      status: 'todo',
+      createdAt: new Date().toISOString(),
+    }
+    set((state) => ({ tasks: [...state.tasks, task] }))
+    scheduleSave()
+  },
+
+  updateTaskStatus: (taskId, status) => {
+    set((state) => ({
+      tasks: state.tasks.map((t) => (t.id === taskId ? { ...t, status } : t)),
+    }))
+    scheduleSave()
+  },
+
+  deleteTask: (taskId) => {
+    set((state) => ({ tasks: state.tasks.filter((t) => t.id !== taskId) }))
     scheduleSave()
   },
 

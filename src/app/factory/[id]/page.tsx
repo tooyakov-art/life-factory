@@ -9,6 +9,7 @@ import { Toolbar } from '@/components/factory/Toolbar'
 import { NodePalette } from '@/components/factory/NodePalette'
 import { KaizenPanel } from '@/components/factory/KaizenPanel'
 import { ContainersPanel } from '@/components/factory/ContainersPanel'
+import { KanbanPanel } from '@/components/factory/KanbanPanel'
 
 function FactoryEditorContent() {
   const params = useParams()
@@ -16,6 +17,7 @@ function FactoryEditorContent() {
   const id = decodeURIComponent(params.id as string)
   const [isKaizenOpen, setIsKaizenOpen] = useState(false)
   const [isContainersOpen, setIsContainersOpen] = useState(false)
+  const [isKanbanOpen, setIsKanbanOpen] = useState(false)
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
   const isMaster = id === '_master'
 
@@ -116,6 +118,7 @@ function FactoryEditorContent() {
       <div className="flex-1 relative pb-14">
         <FactoryCanvas />
         <NodePalette />
+        <KanbanPanel isOpen={isKanbanOpen} onClose={() => setIsKanbanOpen(false)} />
         <KaizenPanel isOpen={isKaizenOpen} onClose={() => setIsKaizenOpen(false)} />
         <ContainersPanel
           isOpen={isContainersOpen}
@@ -130,6 +133,8 @@ function FactoryEditorContent() {
         onKaizenToggle={() => setIsKaizenOpen(!isKaizenOpen)}
         isContainersOpen={isContainersOpen}
         onContainersToggle={() => setIsContainersOpen(!isContainersOpen)}
+        isKanbanOpen={isKanbanOpen}
+        onKanbanToggle={() => setIsKanbanOpen(!isKanbanOpen)}
       />
     </div>
   )

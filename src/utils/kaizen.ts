@@ -179,7 +179,63 @@ export function analyzeKaizen(
 ): KaizenResult[] {
   const results: KaizenResult[] = []
 
-  if (nodes.length === 0) return results
+  // === Пустая схема = нет прогресса = критически плохо ===
+  if (nodes.length === 0) {
+    results.push({
+      ruleId: 'gemba-empty',
+      ruleName: 'Схема пустая',
+      category: 'gemba',
+      severity: 'critical',
+      message: 'Нет ни одного блока — нет прогресса, нет развития',
+      suggestion: 'Добавь цели, процессы и потоки. Без них нечего улучшать.',
+      principle: '現場 Gemba — иди и смотри. Если нечего смотреть — работа не началась.',
+    })
+    results.push({
+      ruleId: 'flow-no-value',
+      ruleName: 'Нет потока ценности',
+      category: 'flow',
+      severity: 'critical',
+      message: 'Поток создания ценности отсутствует — система не работает',
+      suggestion: 'Создай цепочку: Вход → Процесс → Выход. Это основа любой системы.',
+      principle: 'Поток ценности — без потока нет создания ценности. Нулевой прогресс.',
+    })
+    results.push({
+      ruleId: 'pdca-no-plan',
+      ruleName: 'Нет плана (Plan)',
+      category: 'pdca',
+      severity: 'critical',
+      message: 'Первый шаг PDCA — планирование — не выполнен',
+      suggestion: 'Определи цели и процессы. Plan → Do → Check → Act.',
+      principle: 'PDCA Plan — без плана нет действий. Начни с определения целей.',
+    })
+    return results
+  }
+
+  // === Мало блоков — схема недоразвита ===
+  if (nodes.length <= 2) {
+    results.push({
+      ruleId: 'gemba-underdeveloped',
+      ruleName: 'Схема недоразвита',
+      category: 'gemba',
+      severity: 'warning',
+      message: `Всего ${nodes.length} блоков — система слишком простая`,
+      suggestion: 'Добавь больше процессов: откуда приходят ресурсы? Куда идёт результат?',
+      principle: '現場 Gemba — реальная картина неполная. Добавь деталей.',
+    })
+  }
+
+  // === Нет связей при наличии блоков ===
+  if (edges.length === 0) {
+    results.push({
+      ruleId: 'flow-no-connections',
+      ruleName: 'Нет связей',
+      category: 'flow',
+      severity: 'critical',
+      message: 'Блоки есть, но ни один не связан — процессы не работают вместе',
+      suggestion: 'Соедини блоки: кто кому передаёт данные/ресурсы?',
+      principle: 'Поток ценности — изолированные элементы не создают систему.',
+    })
+  }
 
   // Хелперы
   const incoming = (nodeId: string) => edges.filter((e) => e.target === nodeId)

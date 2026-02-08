@@ -7,6 +7,8 @@ interface ToolbarProps {
   onKaizenToggle?: () => void
   isContainersOpen?: boolean
   onContainersToggle?: () => void
+  isKanbanOpen?: boolean
+  onKanbanToggle?: () => void
 }
 
 export function Toolbar({
@@ -14,6 +16,8 @@ export function Toolbar({
   onKaizenToggle,
   isContainersOpen,
   onContainersToggle,
+  isKanbanOpen,
+  onKanbanToggle,
 }: ToolbarProps) {
   const { editorMode, setEditorMode, togglePalette, isPaletteOpen, saveCurrentSchema } =
     useFactoryStore()
@@ -55,6 +59,23 @@ export function Toolbar({
         >
           <span className="text-lg">📦</span>
           <span className="text-[10px] font-medium">Схемы</span>
+        </button>
+
+        {/* План */}
+        <button
+          onClick={onKanbanToggle}
+          className={`
+            flex flex-col items-center gap-0.5 px-4 py-1.5 rounded-lg
+            transition-all touch-manipulation min-w-15
+            ${
+              isKanbanOpen
+                ? 'bg-blue-600/30 text-blue-400'
+                : 'text-slate-400 hover:text-white hover:bg-slate-700/50'
+            }
+          `}
+        >
+          <span className="text-lg">📌</span>
+          <span className="text-[10px] font-medium">План</span>
         </button>
 
         {/* Разделитель */}

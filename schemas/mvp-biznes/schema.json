@@ -1,0 +1,248 @@
+{
+  "id": "mvp-biznes",
+  "name": "MVP Бизнес",
+  "description": "Алгоритм запуска бизнеса по MVP-методологии: идея → валидация → MVP → первые клиенты → масштабирование",
+  "category": "business",
+  "nodes": [
+    {
+      "id": "node-idea",
+      "type": "processNode",
+      "position": { "x": 50, "y": 200 },
+      "data": {
+        "label": "Идея",
+        "emoji": "💡",
+        "category": "input",
+        "color": "#22c55e",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-research",
+      "type": "processNode",
+      "position": { "x": 280, "y": 80 },
+      "data": {
+        "label": "Анализ рынка",
+        "emoji": "🔍",
+        "category": "process",
+        "color": "#3b82f6",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-audience",
+      "type": "processNode",
+      "position": { "x": 280, "y": 320 },
+      "data": {
+        "label": "Целевая аудитория",
+        "emoji": "🎯",
+        "category": "process",
+        "color": "#3b82f6",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-mvp",
+      "type": "processNode",
+      "position": { "x": 530, "y": 200 },
+      "data": {
+        "label": "MVP",
+        "emoji": "🚀",
+        "category": "process",
+        "color": "#8b5cf6",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-test",
+      "type": "processNode",
+      "position": { "x": 760, "y": 100 },
+      "data": {
+        "label": "Тест гипотезы",
+        "emoji": "🧪",
+        "category": "process",
+        "color": "#f59e0b",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-feedback",
+      "type": "processNode",
+      "position": { "x": 760, "y": 320 },
+      "data": {
+        "label": "Обратная связь",
+        "emoji": "🔄",
+        "category": "amplifier",
+        "color": "#ec4899",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-clients",
+      "type": "processNode",
+      "position": { "x": 1000, "y": 200 },
+      "data": {
+        "label": "Первые клиенты",
+        "emoji": "👥",
+        "category": "input",
+        "color": "#22c55e",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-sales",
+      "type": "processNode",
+      "position": { "x": 1230, "y": 120 },
+      "data": {
+        "label": "Продажа",
+        "emoji": "🤝",
+        "category": "process",
+        "color": "#f59e0b",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-revenue",
+      "type": "processNode",
+      "position": { "x": 1460, "y": 200 },
+      "data": {
+        "label": "Доход",
+        "emoji": "💰",
+        "category": "output",
+        "color": "#10b981",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-scale",
+      "type": "processNode",
+      "position": { "x": 1230, "y": 320 },
+      "data": {
+        "label": "Масштабирование",
+        "emoji": "📈",
+        "category": "amplifier",
+        "color": "#ec4899",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-idea-research",
+      "source": "node-idea",
+      "target": "node-research",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 50, "animated": true }
+    },
+    {
+      "id": "e-idea-audience",
+      "source": "node-idea",
+      "target": "node-audience",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 50, "animated": true }
+    },
+    {
+      "id": "e-research-mvp",
+      "source": "node-research",
+      "target": "node-mvp",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 50, "animated": true }
+    },
+    {
+      "id": "e-audience-mvp",
+      "source": "node-audience",
+      "target": "node-mvp",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 50, "animated": true }
+    },
+    {
+      "id": "e-mvp-test",
+      "source": "node-mvp",
+      "target": "node-test",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 5, "flowVolume": 40, "animated": true }
+    },
+    {
+      "id": "e-mvp-feedback",
+      "source": "node-mvp",
+      "target": "node-feedback",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 30, "animated": true }
+    },
+    {
+      "id": "e-feedback-mvp",
+      "source": "node-feedback",
+      "target": "node-mvp",
+      "sourceHandle": "left-out",
+      "targetHandle": "bottom-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 2, "flowVolume": 20, "animated": true, "label": "Итерация" }
+    },
+    {
+      "id": "e-test-clients",
+      "source": "node-test",
+      "target": "node-clients",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 4, "flowVolume": 60, "animated": true }
+    },
+    {
+      "id": "e-clients-sales",
+      "source": "node-clients",
+      "target": "node-sales",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 5, "flowVolume": 70, "animated": true }
+    },
+    {
+      "id": "e-clients-scale",
+      "source": "node-clients",
+      "target": "node-scale",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 40, "animated": true }
+    },
+    {
+      "id": "e-sales-revenue",
+      "source": "node-sales",
+      "target": "node-revenue",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 6, "flowVolume": 80, "animated": true, "label": "Оплата" }
+    },
+    {
+      "id": "e-scale-revenue",
+      "source": "node-scale",
+      "target": "node-revenue",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 4, "flowVolume": 50, "animated": true }
+    }
+  ],
+  "tasks": [
+    { "id": "t1", "title": "Описать идею продукта", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" },
+    { "id": "t2", "title": "Изучить конкурентов", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" },
+    { "id": "t3", "title": "Определить ЦА и боль", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" },
+    { "id": "t4", "title": "Собрать MVP за неделю", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" },
+    { "id": "t5", "title": "Найти 10 тестовых клиентов", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" },
+    { "id": "t6", "title": "Провести первую продажу", "status": "todo", "createdAt": "2026-02-09T00:00:00.000Z" }
+  ],
+  "createdAt": "2026-02-09T00:00:00.000Z",
+  "updatedAt": "2026-02-09T00:00:00.000Z"
+}
