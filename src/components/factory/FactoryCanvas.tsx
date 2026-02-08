@@ -5,6 +5,7 @@ import {
   ReactFlow,
   Background,
   MiniMap,
+  ConnectionMode,
   type NodeMouseHandler,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
@@ -53,6 +54,7 @@ export function FactoryCanvas() {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        connectionMode={ConnectionMode.Loose}
         onPaneClick={handlePaneClick}
         onNodeClick={handleNodeClick}
         nodeTypes={customNodeTypes}

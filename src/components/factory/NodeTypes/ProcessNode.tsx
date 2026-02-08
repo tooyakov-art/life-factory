@@ -53,7 +53,7 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
       {/* Красная пульсация фоном для bottleneck */}
       {isBottleneck && (
         <div
-          className="absolute -inset-3 rounded-2xl animate-ping opacity-20"
+          className="absolute -inset-3 rounded-lg animate-ping opacity-20"
           style={{ backgroundColor: '#ef4444' }}
         />
       )}
@@ -61,7 +61,7 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
       {/* Жёлтая пульсация для warning */}
       {isWarning && (
         <div
-          className="absolute -inset-2 rounded-2xl animate-pulse opacity-15"
+          className="absolute -inset-2 rounded-lg animate-pulse opacity-15"
           style={{ backgroundColor: '#f59e0b' }}
         />
       )}
@@ -69,7 +69,7 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
       {/* Основной блок */}
       <div
         className={`
-          relative min-w-20 rounded-xl border-2 px-3 py-2
+          relative min-w-20 rounded-md border-2 px-3 py-2
           transition-all duration-200 touch-manipulation
           ${selected ? 'ring-2 ring-white/40 scale-105' : ''}
           ${isInactive ? 'opacity-40 grayscale' : ''}
@@ -98,16 +98,54 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
           setShowMenu(!showMenu)
         }}
       >
-        {/* Хэндлы */}
+        {/* Хэндлы — 4 стороны, каждая source+target для свободного подключения */}
         <Handle
           type="target"
           position={Position.Left}
-          className="w-3! h-3! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          id="left-in"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="source"
+          position={Position.Left}
+          id="left-out"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="target"
+          position={Position.Right}
+          id="right-in"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
         />
         <Handle
           type="source"
           position={Position.Right}
-          className="w-3! h-3! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          id="right-out"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="target"
+          position={Position.Top}
+          id="top-in"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="source"
+          position={Position.Top}
+          id="top-out"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="target"
+          position={Position.Bottom}
+          id="bottom-in"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+        />
+        <Handle
+          type="source"
+          position={Position.Bottom}
+          id="bottom-out"
+          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
         />
 
         {/* Индикатор интеграции */}
