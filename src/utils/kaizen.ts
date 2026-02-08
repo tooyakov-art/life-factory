@@ -1,0 +1,491 @@
+import type { FactoryNode, FactoryEdge, FactoryNodeData } from '@/types/factory'
+
+// ===================================================================
+// КАЙДЗЕН (改善) — философия непрерывного совершенствования
+//
+// 7 ключевых принципов:
+// 1. MUDA (無駄) — Устранение потерь (7 видов)
+// 2. 5S — Сортировка, Систематизация, Содержание, Стандартизация, Совершенствование
+// 3. PDCA — Plan, Do, Check, Act (цикл Деминга)
+// 4. GEMBA (現場) — Иди и смотри (проверяй на месте)
+// 5. JIDOKA (自働化) — Автономизация (остановись при проблеме)
+// 6. JIT (Just-in-Time) — Точно вовремя (без лишних запасов)
+// 7. KAIZEN EVENT — Сфокусированные улучшения
+// ===================================================================
+
+export type KaizenCategory =
+  | 'muda'      // Потери
+  | '5s'        // Организация
+  | 'pdca'      // Цикл улучшений
+  | 'gemba'     // Проверка на месте
+  | 'jidoka'    // Автоматическая остановка
+  | 'jit'       // Точно вовремя
+  | 'flow'      // Поток создания ценности
+
+export type KaizenSeverity = 'critical' | 'warning' | 'suggestion' | 'pass'
+
+export interface KaizenRule {
+  id: string
+  name: string
+  description: string
+  category: KaizenCategory
+  principle: string // Краткое описание принципа
+}
+
+export interface KaizenResult {
+  ruleId: string
+  ruleName: string
+  category: KaizenCategory
+  severity: KaizenSeverity
+  message: string
+  nodeIds?: string[]    // Какие узлы затронуты
+  suggestion?: string   // Как исправить
+  principle: string
+}
+
+// ===== Все правила Кайдзен =====
+
+const KAIZEN_RULES: KaizenRule[] = [
+  // --- MUDA: 7 видов потерь ---
+  {
+    id: 'muda-waiting',
+    name: 'Потери ожидания',
+    description: 'Процесс без входящих связей — простаивает, ждёт данные',
+    category: 'muda',
+    principle: '無駄 Muda — устранение 7 видов потерь. Ожидание = время когда ресурс не создаёт ценность.',
+  },
+  {
+    id: 'muda-overprocessing',
+    name: 'Потери излишней обработки',
+    description: 'Цепочка из 5+ процессов подряд без выхода — слишком много шагов',
+    category: 'muda',
+    principle: '無駄 Muda — избыточная обработка. Каждый шаг должен добавлять ценность, иначе это потеря.',
+  },
+  {
+    id: 'muda-defects',
+    name: 'Потери от дефектов',
+    description: 'Узлы в статусе bottleneck — дефектный процесс тормозит всю систему',
+    category: 'muda',
+    principle: '無駄 Muda — дефекты. Исправление ошибок стоит в 10x дороже предотвращения.',
+  },
+  {
+    id: 'muda-inventory',
+    name: 'Потери от запасов',
+    description: 'Узел с большим входящим потоком и маленьким исходящим — копятся "запасы"',
+    category: 'muda',
+    principle: '無駄 Muda — избыточные запасы. Накопление = замороженные ресурсы.',
+  },
+  {
+    id: 'muda-motion',
+    name: 'Потери от лишних движений',
+    description: 'Один узел связан с 5+ другими — слишком много переключений',
+    category: 'muda',
+    principle: '無駄 Muda — лишние движения. Каждое переключение контекста = потеря фокуса.',
+  },
+  {
+    id: 'muda-transport',
+    name: 'Потери транспортировки',
+    description: 'Связь между узлами очень далёкими на схеме — длинный путь передачи',
+    category: 'muda',
+    principle: '無駄 Muda — транспортировка. Длинные пути передачи = задержки и потери информации.',
+  },
+  {
+    id: 'muda-deadend',
+    name: 'Тупик (потери)',
+    description: 'Процесс без выхода — работа делается, но результат никуда не идёт',
+    category: 'muda',
+    principle: '無駄 Muda — перепроизводство/тупик. Если результат никому не нужен — это потеря.',
+  },
+
+  // --- 5S ---
+  {
+    id: '5s-sort',
+    name: '整理 Seiri — Сортировка',
+    description: 'Неактивные узлы занимают место на схеме — убери лишнее',
+    category: '5s',
+    principle: '5S Seiri — убери всё лишнее. Оставь только то, что нужно для работы.',
+  },
+  {
+    id: '5s-order',
+    name: '整頓 Seiton — Систематизация',
+    description: 'Узлы расположены хаотично, нет логичного потока слева направо',
+    category: '5s',
+    principle: '5S Seiton — определи место для каждого элемента. Входы слева, выходы справа.',
+  },
+  {
+    id: '5s-standardize',
+    name: '清潔 Seiketsu — Стандартизация',
+    description: 'Есть дублирующиеся узлы с одинаковым названием',
+    category: '5s',
+    principle: '5S Seiketsu — создай стандарт. Каждый элемент должен быть уникальным.',
+  },
+
+  // --- PDCA ---
+  {
+    id: 'pdca-no-metrics',
+    name: 'Нет метрик (Check)',
+    description: 'Узлы без метрик — невозможно проверить результат',
+    category: 'pdca',
+    principle: 'PDCA Check — нельзя улучшить то, что не измеряешь. Добавь метрики.',
+  },
+  {
+    id: 'pdca-no-feedback',
+    name: 'Нет обратной связи (Act)',
+    description: 'Линейная цепочка без обратных связей — нет цикла улучшений',
+    category: 'pdca',
+    principle: 'PDCA Act — после проверки действуй. Обратная связь замыкает цикл улучшений.',
+  },
+
+  // --- JIDOKA ---
+  {
+    id: 'jidoka-no-stop',
+    name: 'Нет автоматической остановки',
+    description: 'Есть bottleneck, но процессы после него продолжают работать',
+    category: 'jidoka',
+    principle: '自働化 Jidoka — остановись при обнаружении проблемы. Не передавай дефект дальше.',
+  },
+
+  // --- JIT ---
+  {
+    id: 'jit-overload',
+    name: 'Перегрузка входа',
+    description: 'Слишком много входных потоков для одного процесса',
+    category: 'jit',
+    principle: 'JIT — точно вовремя. Не перегружай процесс — подавай ровно столько, сколько может обработать.',
+  },
+
+  // --- FLOW ---
+  {
+    id: 'flow-isolated',
+    name: 'Изолированный узел',
+    description: 'Узел без связей — не участвует в потоке создания ценности',
+    category: 'flow',
+    principle: 'Поток ценности — каждый элемент должен быть частью потока. Изолированный элемент = потеря.',
+  },
+  {
+    id: 'flow-balance',
+    name: 'Дисбаланс потока',
+    description: 'Все связи идут через один узел — единая точка отказа',
+    category: 'flow',
+    principle: 'Поток должен быть сбалансирован. Единая точка отказа = высокий риск остановки.',
+  },
+]
+
+// ===== Анализатор =====
+
+export function analyzeKaizen(
+  nodes: FactoryNode[],
+  edges: FactoryEdge[]
+): KaizenResult[] {
+  const results: KaizenResult[] = []
+
+  if (nodes.length === 0) return results
+
+  // Хелперы
+  const incoming = (nodeId: string) => edges.filter((e) => e.target === nodeId)
+  const outgoing = (nodeId: string) => edges.filter((e) => e.source === nodeId)
+  const getData = (n: FactoryNode) => n.data as FactoryNodeData
+
+  // --- MUDA: Ожидание (процесс без входов) ---
+  for (const node of nodes) {
+    const d = getData(node)
+    if (d.category === 'process' && incoming(node.id).length === 0) {
+      results.push({
+        ruleId: 'muda-waiting',
+        ruleName: 'Потери ожидания',
+        category: 'muda',
+        severity: 'warning',
+        message: `«${d.label}» — процесс без входящих данных, простаивает`,
+        nodeIds: [node.id],
+        suggestion: 'Подключи вход: откуда приходят данные/клиенты для этого процесса?',
+        principle: KAIZEN_RULES.find((r) => r.id === 'muda-waiting')!.principle,
+      })
+    }
+  }
+
+  // --- MUDA: Тупик (процесс без выходов) ---
+  for (const node of nodes) {
+    const d = getData(node)
+    if (d.category === 'process' && outgoing(node.id).length === 0) {
+      results.push({
+        ruleId: 'muda-deadend',
+        ruleName: 'Тупик',
+        category: 'muda',
+        severity: 'warning',
+        message: `«${d.label}» — результат никуда не идёт`,
+        nodeIds: [node.id],
+        suggestion: 'Добавь выход: куда идёт результат этого процесса?',
+        principle: KAIZEN_RULES.find((r) => r.id === 'muda-deadend')!.principle,
+      })
+    }
+  }
+
+  // --- MUDA: Дефекты (bottleneck узлы) ---
+  const bottleneckNodes = nodes.filter((n) => getData(n).status === 'bottleneck')
+  if (bottleneckNodes.length > 0) {
+    results.push({
+      ruleId: 'muda-defects',
+      ruleName: 'Дефекты в системе',
+      category: 'muda',
+      severity: 'critical',
+      message: `${bottleneckNodes.length} процессов сломано: ${bottleneckNodes.map((n) => getData(n).label).join(', ')}`,
+      nodeIds: bottleneckNodes.map((n) => n.id),
+      suggestion: 'Исправь сначала критические проблемы — они тормозят всю систему',
+      principle: KAIZEN_RULES.find((r) => r.id === 'muda-defects')!.principle,
+    })
+  }
+
+  // --- MUDA: Запасы (большой вход, маленький выход) ---
+  for (const node of nodes) {
+    const d = getData(node)
+    const inVol = incoming(node.id).reduce((s, e) => s + ((e.data?.flowVolume as number) ?? 0), 0)
+    const outVol = outgoing(node.id).reduce((s, e) => s + ((e.data?.flowVolume as number) ?? 0), 0)
+    if (inVol > 0 && outVol > 0 && inVol > outVol * 2.5) {
+      results.push({
+        ruleId: 'muda-inventory',
+        ruleName: 'Копятся запасы',
+        category: 'muda',
+        severity: 'warning',
+        message: `«${d.label}» — вход ${inVol} vs выход ${outVol}, копятся необработанные запасы`,
+        nodeIds: [node.id],
+        suggestion: 'Увеличь пропускную способность или уменьши входящий поток',
+        principle: KAIZEN_RULES.find((r) => r.id === 'muda-inventory')!.principle,
+      })
+    }
+  }
+
+  // --- MUDA: Лишние движения (узел с 5+ связями) ---
+  for (const node of nodes) {
+    const d = getData(node)
+    const totalConnections = incoming(node.id).length + outgoing(node.id).length
+    if (totalConnections >= 5) {
+      results.push({
+        ruleId: 'muda-motion',
+        ruleName: 'Слишком много связей',
+        category: 'muda',
+        severity: 'suggestion',
+        message: `«${d.label}» — ${totalConnections} связей, много переключений контекста`,
+        nodeIds: [node.id],
+        suggestion: 'Раздели на несколько специализированных процессов',
+        principle: KAIZEN_RULES.find((r) => r.id === 'muda-motion')!.principle,
+      })
+    }
+  }
+
+  // --- 5S: Сортировка (неактивные узлы) ---
+  const inactiveNodes = nodes.filter((n) => getData(n).status === 'inactive')
+  if (inactiveNodes.length > 0) {
+    results.push({
+      ruleId: '5s-sort',
+      ruleName: '整理 Убери лишнее',
+      category: '5s',
+      severity: 'suggestion',
+      message: `${inactiveNodes.length} выключенных блоков занимают место`,
+      nodeIds: inactiveNodes.map((n) => n.id),
+      suggestion: 'Удали неактивные блоки или активируй их',
+      principle: KAIZEN_RULES.find((r) => r.id === '5s-sort')!.principle,
+    })
+  }
+
+  // --- 5S: Стандартизация (дубли) ---
+  const labelCount = new Map<string, string[]>()
+  for (const node of nodes) {
+    const label = (getData(node).label as string).toLowerCase()
+    if (!labelCount.has(label)) labelCount.set(label, [])
+    labelCount.get(label)!.push(node.id)
+  }
+  for (const [label, ids] of labelCount) {
+    if (ids.length > 1) {
+      results.push({
+        ruleId: '5s-standardize',
+        ruleName: '清潔 Дубли',
+        category: '5s',
+        severity: 'suggestion',
+        message: `«${label}» встречается ${ids.length} раз — возможно дублирование`,
+        nodeIds: ids,
+        suggestion: 'Объедини дубли или дай уникальные имена',
+        principle: KAIZEN_RULES.find((r) => r.id === '5s-standardize')!.principle,
+      })
+    }
+  }
+
+  // --- PDCA: Нет метрик ---
+  const noMetrics = nodes.filter(
+    (n) => getData(n).category === 'process' && !getData(n).metrics
+  )
+  if (noMetrics.length > 0 && nodes.length > 3) {
+    results.push({
+      ruleId: 'pdca-no-metrics',
+      ruleName: 'Нет метрик',
+      category: 'pdca',
+      severity: 'suggestion',
+      message: `${noMetrics.length} процессов без метрик — нечего измерять`,
+      nodeIds: noMetrics.map((n) => n.id),
+      suggestion: 'Добавь KPI: лиды/день, конверсию, время обработки',
+      principle: KAIZEN_RULES.find((r) => r.id === 'pdca-no-metrics')!.principle,
+    })
+  }
+
+  // --- PDCA: Нет обратной связи ---
+  const hasBackEdge = edges.some((e) => {
+    const si = nodes.findIndex((n) => n.id === e.source)
+    const ti = nodes.findIndex((n) => n.id === e.target)
+    return si > ti // Связь идёт "назад"
+  })
+  if (!hasBackEdge && nodes.length > 3) {
+    results.push({
+      ruleId: 'pdca-no-feedback',
+      ruleName: 'Нет обратной связи',
+      category: 'pdca',
+      severity: 'warning',
+      message: 'Линейная цепочка без обратных связей — нет цикла улучшений',
+      suggestion: 'Добавь обратную связь: кейс → маркетинг, отзыв → улучшение',
+      principle: KAIZEN_RULES.find((r) => r.id === 'pdca-no-feedback')!.principle,
+    })
+  }
+
+  // --- JIDOKA: Bottleneck но поток продолжается ---
+  for (const bn of bottleneckNodes) {
+    const downstream = outgoing(bn.id)
+    if (downstream.length > 0) {
+      const downstreamActive = downstream.some((e) => {
+        const target = nodes.find((n) => n.id === e.target)
+        return target && getData(target).status === 'active'
+      })
+      if (downstreamActive) {
+        results.push({
+          ruleId: 'jidoka-no-stop',
+          ruleName: 'Нет остановки при дефекте',
+          category: 'jidoka',
+          severity: 'critical',
+          message: `«${getData(bn).label}» сломан, но процессы после него работают — дефект передаётся дальше`,
+          nodeIds: [bn.id],
+          suggestion: 'Останови зависимые процессы или исправь проблему',
+          principle: KAIZEN_RULES.find((r) => r.id === 'jidoka-no-stop')!.principle,
+        })
+      }
+    }
+  }
+
+  // --- JIT: Перегрузка входа ---
+  for (const node of nodes) {
+    const d = getData(node)
+    if (incoming(node.id).length >= 4) {
+      results.push({
+        ruleId: 'jit-overload',
+        ruleName: 'Перегрузка входа',
+        category: 'jit',
+        severity: 'warning',
+        message: `«${d.label}» — ${incoming(node.id).length} входящих потоков, перегрузка`,
+        nodeIds: [node.id],
+        suggestion: 'Добавь промежуточный буфер или раздели процесс',
+        principle: KAIZEN_RULES.find((r) => r.id === 'jit-overload')!.principle,
+      })
+    }
+  }
+
+  // --- FLOW: Изолированные узлы ---
+  const isolated = nodes.filter(
+    (n) => incoming(n.id).length === 0 && outgoing(n.id).length === 0
+  )
+  if (isolated.length > 0) {
+    results.push({
+      ruleId: 'flow-isolated',
+      ruleName: 'Изолированные узлы',
+      category: 'flow',
+      severity: 'warning',
+      message: `${isolated.length} узлов не подключены: ${isolated.map((n) => getData(n).label).join(', ')}`,
+      nodeIds: isolated.map((n) => n.id),
+      suggestion: 'Подключи к потоку или удали если не нужны',
+      principle: KAIZEN_RULES.find((r) => r.id === 'flow-isolated')!.principle,
+    })
+  }
+
+  // --- FLOW: Единая точка отказа ---
+  for (const node of nodes) {
+    const d = getData(node)
+    const throughput = Math.min(incoming(node.id).length, outgoing(node.id).length)
+    if (throughput >= 3 && incoming(node.id).length >= 3 && outgoing(node.id).length >= 3) {
+      results.push({
+        ruleId: 'flow-balance',
+        ruleName: 'Точка отказа',
+        category: 'flow',
+        severity: 'warning',
+        message: `«${d.label}» — всё проходит через один узел. Если сломается — встанет вся система`,
+        nodeIds: [node.id],
+        suggestion: 'Распредели нагрузку — создай параллельные пути',
+        principle: KAIZEN_RULES.find((r) => r.id === 'flow-balance')!.principle,
+      })
+    }
+  }
+
+  // --- Пройденные проверки (pass) ---
+  const failedIds = new Set(results.map((r) => r.ruleId))
+  if (!failedIds.has('muda-defects') && nodes.length > 0) {
+    results.push({
+      ruleId: 'muda-defects',
+      ruleName: 'Нет дефектов',
+      category: 'muda',
+      severity: 'pass',
+      message: 'Все процессы работают без ошибок',
+      principle: '無駄 Muda — ноль дефектов в системе.',
+    })
+  }
+  if (hasBackEdge) {
+    results.push({
+      ruleId: 'pdca-no-feedback',
+      ruleName: 'Есть обратная связь',
+      category: 'pdca',
+      severity: 'pass',
+      message: 'Цикл обратной связи присутствует',
+      principle: 'PDCA — цикл замкнут, есть механизм улучшений.',
+    })
+  }
+  if (isolated.length === 0 && nodes.length > 0) {
+    results.push({
+      ruleId: 'flow-isolated',
+      ruleName: 'Все узлы подключены',
+      category: 'flow',
+      severity: 'pass',
+      message: 'Все элементы являются частью потока ценности',
+      principle: 'Поток ценности — каждый элемент вносит вклад.',
+    })
+  }
+
+  return results
+}
+
+// Статистика по результатам
+export function getKaizenScore(results: KaizenResult[]): {
+  score: number
+  total: number
+  passed: number
+  criticals: number
+  warnings: number
+  suggestions: number
+} {
+  const passed = results.filter((r) => r.severity === 'pass').length
+  const criticals = results.filter((r) => r.severity === 'critical').length
+  const warnings = results.filter((r) => r.severity === 'warning').length
+  const suggestions = results.filter((r) => r.severity === 'suggestion').length
+  const total = results.length
+  const problems = criticals + warnings + suggestions
+
+  // Скор: 100 если нет проблем, минус за каждую
+  const score = Math.max(0, Math.round(
+    100 - criticals * 25 - warnings * 10 - suggestions * 3
+  ))
+
+  return { score, total, passed, criticals, warnings, suggestions }
+}
+
+// Категории для фильтра
+export const KAIZEN_CATEGORIES: { id: KaizenCategory; label: string; emoji: string; jp: string }[] = [
+  { id: 'muda', label: 'Потери', emoji: '🗑️', jp: '無駄' },
+  { id: '5s', label: 'Организация', emoji: '🧹', jp: '5S' },
+  { id: 'pdca', label: 'Цикл улучшений', emoji: '🔄', jp: 'PDCA' },
+  { id: 'gemba', label: 'Проверка', emoji: '👀', jp: '現場' },
+  { id: 'jidoka', label: 'Автоостановка', emoji: '🛑', jp: '自働化' },
+  { id: 'jit', label: 'Точно вовремя', emoji: '⏱️', jp: 'JIT' },
+  { id: 'flow', label: 'Поток', emoji: '🌊', jp: 'Flow' },
+]

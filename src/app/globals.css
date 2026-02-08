@@ -1,26 +1,123 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-background: #0f172a;
+  --color-foreground: #f1f5f9;
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Фоновая сетка в стиле Factorio */
+.factory-grid {
+  background-image:
+    linear-gradient(rgba(51, 65, 85, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(51, 65, 85, 0.3) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Свечение карточки при наведении */
+.card-glow {
+  transition: all 0.3s ease;
+}
+.card-glow:hover {
+  box-shadow:
+    0 0 20px rgba(59, 130, 246, 0.15),
+    0 0 60px rgba(59, 130, 246, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Цветное свечение по категориям */
+.glow-business:hover {
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.2), 0 0 60px rgba(59, 130, 246, 0.06);
+}
+.glow-finance:hover {
+  box-shadow: 0 0 25px rgba(16, 185, 129, 0.2), 0 0 60px rgba(16, 185, 129, 0.06);
+}
+.glow-skills:hover {
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.2), 0 0 60px rgba(139, 92, 246, 0.06);
+}
+.glow-life:hover {
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.2), 0 0 60px rgba(245, 158, 11, 0.06);
+}
+.glow-master:hover {
+  box-shadow: 0 0 25px rgba(236, 72, 153, 0.2), 0 0 60px rgba(236, 72, 153, 0.06);
+}
+
+/* Градиентная полоска сверху карточки */
+.card-stripe {
+  position: relative;
+  overflow: hidden;
+}
+.card-stripe::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 12px 12px 0 0;
+  background: var(--stripe-color, #3b82f6);
+}
+
+/* Пульсация для кнопки */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); }
+  50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.5); }
+}
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Анимация появления палитры снизу */
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.animate-slide-up {
+  animation: slide-up 0.2s ease-out;
+}
+
+/* Анимация появления карточек */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out forwards;
+  opacity: 0;
+}
+
+/* Скрытие скроллбара в палитре категорий */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Safe area для iPhone с челкой */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* React Flow стили */
+.react-flow__attribution {
+  display: none !important;
 }
