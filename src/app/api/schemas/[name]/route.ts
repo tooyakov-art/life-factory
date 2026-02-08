@@ -6,11 +6,11 @@ const SCHEMAS_DIR = path.join(process.cwd(), 'schemas')
 
 type Params = { params: Promise<{ name: string }> }
 
-// GET /api/schemas/[name] — читает конкретную схему
+// GET /api/schemas/[name] — читает schema.json из папки-контейнера
 export async function GET(_request: Request, { params }: Params) {
   const { name } = await params
   try {
-    const filepath = path.join(SCHEMAS_DIR, `${name}.json`)
+    const filepath = path.join(SCHEMAS_DIR, name, 'schema.json')
     const content = await fs.readFile(filepath, 'utf-8')
     return NextResponse.json(JSON.parse(content))
   } catch {
@@ -18,12 +18,17 @@ export async function GET(_request: Request, { params }: Params) {
   }
 }
 
-// PUT /api/schemas/[name] — сохраняет схему
+// PUT /api/schemas/[name] — пишет ТОЛЬКО в schema.json этой папки
 export async function PUT(request: Request, { params }: Params) {
   const { name } = await params
   try {
     const schema = await request.json()
-    const filepath = path.join(SCHEMAS_DIR, `${name}.json`)
+    const dirPath = path.join(SCHEMAS_DIR, name)
+    const filepath = path.join(dirPath, 'schema.json')
+
+    // Убеждаемся что папка существует
+    await fs.mkdir(dirPath, { recursive: true })
+
     schema.updatedAt = new Date().toISOString()
     await fs.writeFile(filepath, JSON.stringify(schema, null, 2), 'utf-8')
     return NextResponse.json(schema)
@@ -32,12 +37,12 @@ export async function PUT(request: Request, { params }: Params) {
   }
 }
 
-// DELETE /api/schemas/[name] — удаляет схему
+// DELETE /api/schemas/[name] — удаляет всю папку-контейнер
 export async function DELETE(_request: Request, { params }: Params) {
   const { name } = await params
   try {
-    const filepath = path.join(SCHEMAS_DIR, `${name}.json`)
-    await fs.unlink(filepath)
+    const dirPath = path.join(SCHEMAS_DIR, name)
+    await fs.rm(dirPath, { recursive: true, force: true })
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Schema not found' }, { status: 404 })

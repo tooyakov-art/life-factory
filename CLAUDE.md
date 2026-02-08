@@ -10,12 +10,16 @@
 - Zustand для стейта
 - PWA для мобильного
 
-## Хранение: локальные JSON файлы в schemas/
-- Каждая схема = отдельный .json файл в папке schemas/
+## Хранение: папки-контейнеры в schemas/
+- Каждая схема = папка с 3 файлами:
+  - schema.json — данные (узлы, связи, метаданные)
+  - CLAUDE.md — правила изоляции для AI
+  - README.md — описание для человека
+- Структура: schemas/воронка-продаж/, schemas/клиентский-проект/, schemas/_master/
 - API роуты: GET/POST /api/schemas, GET/PUT/DELETE /api/schemas/[name]
 - Автосохранение: debounce 2 секунды + интервал 30 секунд
+- Каждая папка полностью автономна
 - Файлы видны в проводнике, открываются в VS Code, хранятся в git
-- Как Obsidian — просто файлы, работает без интернета
 
 ## Запуск
 - npm run dev — дев-сервер
@@ -50,11 +54,13 @@
 - Новый узел: появляется с scale анимацией
 
 ## Структура проекта
+- schemas/ — папки-контейнеры схем (каждая = schema.json + CLAUDE.md + README.md)
 - src/types/factory.ts — все типы данных
 - src/store/ — Zustand stores (useFactoryStore, useAlertStore)
+- src/app/api/schemas/ — API роуты для CRUD контейнеров
 - src/components/factory/ — компоненты редактора (Canvas, NodeTypes, EdgeTypes, Toolbar, Palette)
 - src/components/dashboard/ — компоненты главной страницы
-- src/utils/ — утилиты (bottleneck, metrics, templates)
+- src/utils/ — утилиты (bottleneck, metrics, templates, kaizen)
 - src/app/page.tsx — главная (дашборд)
 - src/app/factory/[id]/page.tsx — редактор схемы
 
