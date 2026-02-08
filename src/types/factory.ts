@@ -7,6 +7,7 @@ export type NodeCategory =
   | 'output'      // Выход: деньги, результат, продукт
   | 'amplifier'   // Усилитель: шаблон, автоматизация, реферал
   | 'alert'       // Проблема: узкое горлышко, затык
+  | 'schema'      // Ссылка на вложенную схему
 
 // Данные кастомного узла
 export interface FactoryNodeData {
@@ -31,6 +32,8 @@ export interface FactoryNodeData {
   }
   // Статус узла
   status: 'active' | 'bottleneck' | 'inactive' | 'warning'
+  // Ссылка на вложенную схему (для SchemaNode)
+  referencedSchemaId?: string
 }
 
 // Данные кастомной связи
@@ -43,7 +46,7 @@ export interface FactoryEdgeData {
 }
 
 // Типизированные React Flow узлы и связи
-export type FactoryNode = Node<FactoryNodeData, 'processNode'>
+export type FactoryNode = Node<FactoryNodeData, 'processNode' | 'schemaNode'>
 export type FactoryEdge = Edge<FactoryEdgeData>
 
 // Схема — одна "фабрика"
@@ -68,6 +71,20 @@ export interface Alert {
   severity: 'critical' | 'warning' | 'info'
   createdAt: string
   resolved: boolean
+}
+
+// Daily Check-in — утренний статус схем
+export interface DailyStatus {
+  schemaId: string
+  schemaName: string
+  status: 'green' | 'yellow' | 'red'
+  note?: string  // При red — "что не так?"
+}
+
+export interface DailyCheckIn {
+  date: string        // YYYY-MM-DD
+  entries: DailyStatus[]
+  createdAt: string   // ISO
 }
 
 // Категории цветов узлов

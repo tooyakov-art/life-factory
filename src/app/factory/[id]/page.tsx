@@ -79,23 +79,35 @@ function FactoryEditorContent() {
               </h1>
             </>
           ) : (
-            <>
+            <div className="flex items-center gap-1.5 min-w-0">
               <button
                 onClick={() => {
                   saveCurrentSchema()
                   router.push('/factory/_master')
                 }}
-                className="text-slate-400 hover:text-white transition-colors p-2 touch-manipulation"
+                className="flex items-center gap-1.5 text-slate-400 hover:text-white transition-colors touch-manipulation shrink-0"
               >
-                ←
+                <div className="w-6 h-6 rounded bg-linear-to-br from-blue-500 to-purple-600 flex items-center justify-center text-xs">
+                  🏭
+                </div>
+                <span className="text-sm font-medium hidden sm:inline">Life Factory</span>
               </button>
-              <h1 className="text-lg font-semibold truncate max-w-[200px] sm:max-w-none">
+              <span className="text-slate-600 shrink-0">/</span>
+              <h1 className="text-sm font-semibold truncate text-slate-200">
                 {schema.name}
               </h1>
-            </>
+            </div>
           )}
         </div>
         <div className="flex items-center gap-2 text-sm text-slate-400">
+          {isMaster && (
+            <button
+              onClick={() => router.push('/daily')}
+              className="px-3 py-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-700/60 text-slate-300 hover:text-white transition-all text-xs font-medium touch-manipulation"
+            >
+              Daily
+            </button>
+          )}
           <span>{nodes.length} блоков</span>
         </div>
       </header>
