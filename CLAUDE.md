@@ -8,8 +8,14 @@
 - Next.js 16 + TypeScript + Tailwind CSS
 - @xyflow/react для графов
 - Zustand для стейта
-- Supabase для базы и auth (подключить позже)
 - PWA для мобильного
+
+## Хранение: локальные JSON файлы в schemas/
+- Каждая схема = отдельный .json файл в папке schemas/
+- API роуты: GET/POST /api/schemas, GET/PUT/DELETE /api/schemas/[name]
+- Автосохранение: debounce 2 секунды + интервал 30 секунд
+- Файлы видны в проводнике, открываются в VS Code, хранятся в git
+- Как Obsidian — просто файлы, работает без интернета
 
 ## Запуск
 - npm run dev — дев-сервер

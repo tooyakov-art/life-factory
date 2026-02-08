@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useFactoryStore } from '@/store/useFactoryStore'
 import { useAlertStore } from '@/store/useAlertStore'
@@ -36,29 +36,42 @@ const TEMPLATE_STRIPE: Record<string, string> = {
 
 export default function Home() {
   const router = useRouter()
-  const { schemas, addSchema } = useFactoryStore()
+  const { schemas, addSchema, loadSchemas, isLoading } = useFactoryStore()
   const { getBySchema } = useAlertStore()
   const [showNewForm, setShowNewForm] = useState(false)
   const [newName, setNewName] = useState('')
   const [newCategory, setNewCategory] = useState<Schema['category']>('business')
 
-  const handleCreate = () => {
+  // Загружаем схемы из файлов при открытии
+  useEffect(() => {
+    loadSchemas()
+  }, [loadSchemas])
+
+  const handleCreate = async () => {
     if (!newName.trim()) return
-
-    const schema: Schema = {
-      id: `schema-${Date.now()}`,
-      name: newName.trim(),
-      category: newCategory,
-      nodes: [],
-      edges: [],
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    try {
+      const schema = await addSchema({
+        name: newName.trim(),
+        category: newCategory,
+        nodes: [],
+        edges: [],
+      })
+      setNewName('')
+      setShowNewForm(false)
+      router.push(`/factory/${encodeURIComponent(schema.id)}`)
+    } catch (err) {
+      console.error('Ошибка создания схемы:', err)
     }
+  }
 
-    addSchema(schema)
-    setNewName('')
-    setShowNewForm(false)
-    router.push(`/factory/${schema.id}`)
+  const handleTemplateClick = async (tpl: (typeof SCHEMA_TEMPLATES)[number]) => {
+    try {
+      const data = createSchemaFromTemplate(tpl)
+      const schema = await addSchema(data)
+      router.push(`/factory/${encodeURIComponent(schema.id)}`)
+    } catch (err) {
+      console.error('Ошибка создания из шаблона:', err)
+    }
   }
 
   return (
@@ -94,11 +107,18 @@ export default function Home() {
       </header>
 
       <main className="max-w-5xl mx-auto px-4 sm:px-8 py-8">
+        {/* Загрузка */}
+        {isLoading && (
+          <div className="text-center py-12">
+            <p className="text-slate-400 text-sm animate-pulse">Загрузка схем...</p>
+          </div>
+        )}
+
         {/* Статистика */}
-        {schemas.length > 0 && <OverviewStats />}
+        {!isLoading && schemas.length > 0 && <OverviewStats />}
 
         {/* Алерты */}
-        <AlertsList />
+        {!isLoading && <AlertsList />}
 
         {/* Форма создания */}
         {showNewForm && (
@@ -147,7 +167,7 @@ export default function Home() {
         )}
 
         {/* Шаблоны (если нет схем) */}
-        {schemas.length === 0 && (
+        {!isLoading && schemas.length === 0 && (
           <section className="mb-10">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-1 h-6 bg-linear-to-b from-blue-500 to-purple-500 rounded-full" />
@@ -157,11 +177,7 @@ export default function Home() {
               {SCHEMA_TEMPLATES.map((tpl, i) => (
                 <button
                   key={tpl.name}
-                  onClick={() => {
-                    const schema = createSchemaFromTemplate(tpl)
-                    addSchema(schema)
-                    router.push(`/factory/${schema.id}`)
-                  }}
+                  onClick={() => handleTemplateClick(tpl)}
                   className={`
                     text-left p-5 rounded-2xl border border-slate-700/50 bg-slate-800/40
                     card-glow card-stripe ${TEMPLATE_GLOW[tpl.category]}
@@ -197,7 +213,7 @@ export default function Home() {
         )}
 
         {/* Список схем / пустое состояние */}
-        {schemas.length === 0 ? (
+        {!isLoading && schemas.length === 0 ? (
           <div className="text-center py-8">
             <div className="w-px h-12 bg-linear-to-b from-slate-700 to-transparent mx-auto mb-4" />
             <p className="text-slate-500 text-sm mb-4">
@@ -210,7 +226,7 @@ export default function Home() {
               + Пустая схема
             </button>
           </div>
-        ) : (
+        ) : !isLoading && schemas.length > 0 ? (
           <>
             <div className="flex items-center gap-2 mb-5">
               <div className="w-1 h-6 bg-linear-to-b from-emerald-500 to-blue-500 rounded-full" />
@@ -231,7 +247,7 @@ export default function Home() {
               ))}
             </div>
           </>
-        )}
+        ) : null}
       </main>
     </div>
   )

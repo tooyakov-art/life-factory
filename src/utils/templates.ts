@@ -207,22 +207,21 @@ export const SCHEMA_TEMPLATES: SchemaTemplate[] = [
   },
 ]
 
-// Создать Schema из шаблона
-export function createSchemaFromTemplate(template: SchemaTemplate): Schema {
-  const now = new Date().toISOString()
+// Создать данные для Schema из шаблона (без id/дат — API сгенерирует)
+export function createSchemaFromTemplate(
+  template: SchemaTemplate
+): Omit<Schema, 'id' | 'createdAt' | 'updatedAt'> {
+  const ts = Date.now()
   return {
-    id: `schema-${Date.now()}`,
     name: template.name,
     description: template.description,
     category: template.category,
-    nodes: template.nodes.map((n) => ({ ...n, id: `${n.id}-${Date.now()}` })),
+    nodes: template.nodes.map((n) => ({ ...n, id: `${n.id}-${ts}` })),
     edges: template.edges.map((e) => ({
       ...e,
-      id: `${e.id}-${Date.now()}`,
-      source: `${e.source}-${Date.now()}`,
-      target: `${e.target}-${Date.now()}`,
+      id: `${e.id}-${ts}`,
+      source: `${e.source}-${ts}`,
+      target: `${e.target}-${ts}`,
     })),
-    createdAt: now,
-    updatedAt: now,
   }
 }

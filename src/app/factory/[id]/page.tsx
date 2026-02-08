@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { ReactFlowProvider } from '@xyflow/react'
 import { useFactoryStore } from '@/store/useFactoryStore'
@@ -12,15 +12,23 @@ import { KaizenPanel } from '@/components/factory/KaizenPanel'
 function FactoryEditorContent() {
   const params = useParams()
   const router = useRouter()
-  const id = params.id as string
+  const id = decodeURIComponent(params.id as string)
   const [isKaizenOpen, setIsKaizenOpen] = useState(false)
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  const { schemas, activeSchemaId, setActiveSchema, saveCurrentSchema, nodes } =
+  const { schemas, activeSchemaId, setActiveSchema, saveCurrentSchema, loadSchemas, nodes } =
     useFactoryStore()
 
   const schema = schemas.find((s) => s.id === id)
 
-  // Загружаем схему при открытии
+  // Загружаем схемы если ещё не загружены (прямой заход по URL)
+  useEffect(() => {
+    if (schemas.length === 0) {
+      loadSchemas()
+    }
+  }, [schemas.length, loadSchemas])
+
+  // Активируем схему когда данные загрузились
   useEffect(() => {
     if (id && schemas.length > 0 && activeSchemaId !== id) {
       const exists = schemas.find((s) => s.id === id)
@@ -32,9 +40,15 @@ function FactoryEditorContent() {
     }
   }, [id, schemas, activeSchemaId, setActiveSchema, router])
 
-  // Автосохранение при уходе со страницы
+  // Интервал автосохранения каждые 30 секунд
   useEffect(() => {
+    intervalRef.current = setInterval(() => {
+      saveCurrentSchema()
+    }, 30000)
+
     return () => {
+      if (intervalRef.current) clearInterval(intervalRef.current)
+      // Сохраняем при уходе со страницы
       saveCurrentSchema()
     }
   }, [saveCurrentSchema])
@@ -42,7 +56,7 @@ function FactoryEditorContent() {
   if (!schema) {
     return (
       <div className="flex h-screen items-center justify-center bg-slate-900">
-        <p className="text-slate-400">Загрузка схемы...</p>
+        <p className="text-slate-400 animate-pulse">Загрузка схемы...</p>
       </div>
     )
   }
