@@ -26,7 +26,7 @@ export interface FactoryNodeData {
   }
   // Интеграция с внешним сервисом
   integration?: {
-    type: 'whatsapp' | 'instagram' | 'telegram' | 'manual'
+    type: 'steam' | 'whatsapp' | 'instagram' | 'telegram' | 'manual'
     status: 'connected' | 'disconnected' | 'error'
     lastSync?: string
   }

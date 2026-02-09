@@ -1,0 +1,302 @@
+{
+  "id": "_master",
+  "name": "Мастер-схема",
+  "description": "Все сферы жизни как единая фабрика: бизнес, финансы, навыки, здоровье, отношения",
+  "category": "master",
+  "nodes": [
+    {
+      "id": "schema-rutina",
+      "type": "schemaNode",
+      "position": {
+        "x": 100,
+        "y": 200
+      },
+      "data": {
+        "label": "Рутина/Привычки",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#22c55e",
+        "status": "active",
+        "referencedSchemaId": "rutina-privychki"
+      },
+      "measured": {
+        "width": 199,
+        "height": 102
+      }
+    },
+    {
+      "id": "schema-zdorovie",
+      "type": "schemaNode",
+      "position": {
+        "x": 400,
+        "y": 80
+      },
+      "data": {
+        "label": "Здоровье/Спорт",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#ef4444",
+        "status": "active",
+        "referencedSchemaId": "zdorovie-sport"
+      },
+      "measured": {
+        "width": 188,
+        "height": 102
+      }
+    },
+    {
+      "id": "schema-navyki",
+      "type": "schemaNode",
+      "position": {
+        "x": 400,
+        "y": 320
+      },
+      "data": {
+        "label": "Навыки/Обучение",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#a855f7",
+        "status": "active",
+        "referencedSchemaId": "navyki-obuchenie"
+      },
+      "measured": {
+        "width": 201,
+        "height": 102
+      }
+    },
+    {
+      "id": "schema-mvp",
+      "type": "schemaNode",
+      "position": {
+        "x": 700,
+        "y": 200
+      },
+      "data": {
+        "label": "MVP Бизнес",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#3b82f6",
+        "status": "active",
+        "referencedSchemaId": "mvp-biznes"
+      },
+      "measured": {
+        "width": 169,
+        "height": 102
+      }
+    },
+    {
+      "id": "schema-lichnaya",
+      "type": "schemaNode",
+      "position": {
+        "x": 1000,
+        "y": 80
+      },
+      "data": {
+        "label": "Личная жизнь",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#ec4899",
+        "status": "active",
+        "referencedSchemaId": "lichnaya-zhizn"
+      },
+      "measured": {
+        "width": 172,
+        "height": 102
+      }
+    },
+    {
+      "id": "schema-otdyh",
+      "type": "schemaNode",
+      "position": {
+        "x": 1000,
+        "y": 320
+      },
+      "data": {
+        "label": "Отдых/Восстановление",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#f59e0b",
+        "status": "active",
+        "referencedSchemaId": "otdyh-vosstanovlenie"
+      },
+      "measured": {
+        "width": 239,
+        "height": 102
+      }
+    },
+    {
+      "id": "kaizen-master",
+      "type": "kaizenNode",
+      "position": {
+        "x": 1400,
+        "y": 100
+      },
+      "data": {
+        "label": "Кайдзен",
+        "emoji": "改",
+        "category": "alert",
+        "color": "#f59e0b",
+        "status": "active"
+      },
+      "measured": {
+        "width": 320,
+        "height": 311
+      }
+    },
+    {
+      "id": "kanban-master",
+      "type": "kanbanNode",
+      "position": {
+        "x": 100,
+        "y": -300
+      },
+      "data": {
+        "label": "План",
+        "emoji": "📌",
+        "category": "process",
+        "color": "#8b5cf6",
+        "status": "active"
+      },
+      "measured": {
+        "width": 1040,
+        "height": 246
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-rutina-zdorovie",
+      "source": "schema-rutina",
+      "target": "schema-zdorovie",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-rutina-navyki",
+      "source": "schema-rutina",
+      "target": "schema-navyki",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-zdorovie-mvp",
+      "source": "schema-zdorovie",
+      "target": "schema-mvp",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-navyki-mvp",
+      "source": "schema-navyki",
+      "target": "schema-mvp",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-mvp-lichnaya",
+      "source": "schema-mvp",
+      "target": "schema-lichnaya",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-mvp-otdyh",
+      "source": "schema-mvp",
+      "target": "schema-otdyh",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-otdyh-rutina",
+      "source": "schema-otdyh",
+      "target": "schema-rutina",
+      "sourceHandle": "bottom-out",
+      "targetHandle": "bottom-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 2,
+        "flowVolume": 30,
+        "animated": true,
+        "label": "Цикл"
+      }
+    }
+  ],
+  "tasks": [],
+  "createdAt": "2026-02-08T00:00:00.000Z",
+  "updatedAt": "2026-02-09T20:33:40.041Z",
+  "version": "0.2",
+  "kanbanColumns": [
+    {
+      "id": "year",
+      "label": "В этом году",
+      "emoji": "📅",
+      "color": "#6366f1"
+    },
+    {
+      "id": "month",
+      "label": "В этом месяце",
+      "emoji": "🗓️",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "week",
+      "label": "Неделя",
+      "emoji": "📋",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "tomorrow",
+      "label": "Завтра",
+      "emoji": "⏳",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "today",
+      "label": "Сегодня",
+      "emoji": "🔥",
+      "color": "#ef4444"
+    },
+    {
+      "id": "done",
+      "label": "Готово",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ]
+}

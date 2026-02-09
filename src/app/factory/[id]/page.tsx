@@ -6,6 +6,7 @@ import { ReactFlowProvider } from '@xyflow/react'
 import { useFactoryStore } from '@/store/useFactoryStore'
 import { FactoryCanvas } from '@/components/factory/FactoryCanvas'
 import { FiveWhysModal } from '@/components/factory/FiveWhysModal'
+import { useIntegrationPolling } from '@/hooks/useIntegrationPolling'
 
 function FactoryEditorContent() {
   const params = useParams()
@@ -79,6 +80,9 @@ function FactoryEditorContent() {
       ensureKaizenNode()
     }
   }, [activeSchemaId, id, isMaster, ensureKanbanNode, ensureKaizenNode])
+
+  // Интеграции (Steam и т.д.) — опрос внешних API
+  useIntegrationPolling(activeSchemaId)
 
   useEffect(() => {
     intervalRef.current = setInterval(() => {

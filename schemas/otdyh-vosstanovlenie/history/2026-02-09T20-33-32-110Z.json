@@ -1,0 +1,196 @@
+{
+  "id": "otdyh-vosstanovlenie",
+  "name": "Отдых/Восстановление",
+  "description": "Сон, медитация, хобби — восстановление это не потеря, а инвестиция в продуктивность",
+  "category": "life",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "node-sleep",
+      "type": "processNode",
+      "position": {
+        "x": -1.8292873779632117,
+        "y": 79.26828504881472
+      },
+      "data": {
+        "label": "Сон",
+        "emoji": "🌙",
+        "category": "process",
+        "color": "#06b6d4",
+        "description": "Полноценный сон 7-8 часов. Цель: ложиться и вставать в одно время",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 8,
+          "trend": "stable",
+          "unit": "часов/ночь"
+        }
+      },
+      "measured": {
+        "width": 146,
+        "height": 59
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-meditation",
+      "type": "processNode",
+      "position": {
+        "x": -12.19514485355586,
+        "y": 290.36585747559263
+      },
+      "data": {
+        "label": "Медитация",
+        "emoji": "🧘",
+        "category": "process",
+        "color": "#06b6d4",
+        "description": "Ежедневная медитация и осознанность. Цель: 15 минут утром",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 15,
+          "trend": "stable",
+          "unit": "мин/день"
+        }
+      },
+      "measured": {
+        "width": 140,
+        "height": 59
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "node-hobby",
+      "type": "processNode",
+      "position": {
+        "x": 126.37188728382324,
+        "y": 182.22560689330558
+      },
+      "data": {
+        "label": "Хобби",
+        "emoji": "🎮",
+        "category": "process",
+        "color": "#06b6d4",
+        "description": "Увлечения и творчество без цели. Цель: переключение и удовольствие",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 3,
+          "trend": "stable",
+          "unit": "часов/нед"
+        }
+      },
+      "measured": {
+        "width": 140,
+        "height": 59
+      },
+      "selected": true,
+      "dragging": false
+    },
+    {
+      "id": "node-recovery",
+      "type": "processNode",
+      "position": {
+        "x": 550,
+        "y": 190
+      },
+      "data": {
+        "label": "Восстановленность",
+        "emoji": "🔋",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Уровень восстановления. Цель: начинать каждый день с полной батарейкой",
+        "status": "active"
+      },
+      "measured": {
+        "width": 201,
+        "height": 39
+      }
+    },
+    {
+      "id": "kaizen-1770668157315",
+      "type": "kaizenNode",
+      "position": {
+        "x": 800,
+        "y": 90
+      },
+      "data": {
+        "label": "Кайдзен",
+        "emoji": "改",
+        "category": "alert",
+        "color": "#f59e0b",
+        "status": "active"
+      },
+      "measured": {
+        "width": 320,
+        "height": 536
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-sleep-recovery",
+      "source": "node-sleep",
+      "target": "node-recovery",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 5,
+        "flowVolume": 70,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-meditation-recovery",
+      "source": "node-meditation",
+      "target": "node-recovery",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-hobby-recovery",
+      "source": "node-hobby",
+      "target": "node-recovery",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    }
+  ],
+  "tasks": [],
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ],
+  "createdAt": "2026-02-09T17:58:08.364Z",
+  "updatedAt": "2026-02-09T20:33:32.107Z"
+}
