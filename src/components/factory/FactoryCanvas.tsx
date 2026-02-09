@@ -1,19 +1,17 @@
 'use client'
 
-import { useCallback } from 'react'
 import {
   ReactFlow,
   Background,
   MiniMap,
   ConnectionMode,
-  type NodeMouseHandler,
 } from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
 import { useFactoryStore } from '@/store/useFactoryStore'
 import { customNodeTypes } from './NodeTypes'
 import { customEdgeTypes } from './EdgeTypes'
-import type { FactoryNode, FactoryNodeData, NodePreset } from '@/types/factory'
+import type { FactoryNodeData } from '@/types/factory'
 
 export function FactoryCanvas() {
   const {
@@ -22,29 +20,7 @@ export function FactoryCanvas() {
     onNodesChange,
     onEdgesChange,
     onConnect,
-    editorMode,
-    addNode,
-    closePalette,
   } = useFactoryStore()
-
-  // Клик по канвасу — добавить узел если режим addNode
-  const handlePaneClick = useCallback(
-    (event: React.MouseEvent) => {
-      if (editorMode !== 'addNode') return
-      // Координаты берём из React Flow через screenToFlowPosition в будущем
-      // Пока просто закрываем палитру
-      closePalette()
-    },
-    [editorMode, closePalette]
-  )
-
-  // Клик по узлу
-  const handleNodeClick: NodeMouseHandler<FactoryNode> = useCallback(
-    (_event, node) => {
-      // Будущая логика: открытие деталей узла
-    },
-    []
-  )
 
   return (
     <div className="w-full h-full">
@@ -55,8 +31,6 @@ export function FactoryCanvas() {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         connectionMode={ConnectionMode.Loose}
-        onPaneClick={handlePaneClick}
-        onNodeClick={handleNodeClick}
         nodeTypes={customNodeTypes}
         edgeTypes={customEdgeTypes}
         fitView
@@ -65,7 +39,7 @@ export function FactoryCanvas() {
         panOnScroll={false}
         panOnDrag={true}
         zoomOnPinch={true}
-        deleteKeyCode="Delete"
+        deleteKeyCode={null}
         style={{ background: '#0f172a' }}
         defaultEdgeOptions={{
           type: 'animatedEdge',

@@ -88,21 +88,21 @@ function SchemaNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
       >
         {/* Хэндлы — 4 стороны */}
         <Handle type="target" position={Position.Left} id="left-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="source" position={Position.Left} id="left-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="target" position={Position.Right} id="right-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="source" position={Position.Right} id="right-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="target" position={Position.Top} id="top-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="source" position={Position.Top} id="top-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="target" position={Position.Bottom} id="bottom-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
         <Handle type="source" position={Position.Bottom} id="bottom-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!" />
+          className="w-1! h-1! opacity-0! pointer-events-none!" />
 
         {/* Статус-точка */}
         <div className={`absolute -top-1.5 -right-1.5 w-3.5 h-3.5 rounded-full border-2 border-slate-900 shadow-md ${STATUS_DOT[childStatus]}`} />
@@ -115,8 +115,9 @@ function SchemaNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
           </span>
         </div>
 
-        {/* Мета: кол-во блоков/связей внутри */}
+        {/* Мета: версия + кол-во блоков/связей внутри */}
         <div className="mt-1.5 flex items-center gap-2 text-[10px] text-slate-400">
+          <span className="font-mono text-slate-500">v{childSchema?.version || '0.1'}</span>
           <span>{nodeCount} блоков</span>
           <span>{edgeCount} связей</span>
         </div>

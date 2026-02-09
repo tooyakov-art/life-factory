@@ -216,6 +216,7 @@ export function createSchemaFromTemplate(
     name: template.name,
     description: template.description,
     category: template.category,
+    version: '0.1',
     nodes: template.nodes.map((n) => ({ ...n, id: `${n.id}-${ts}` })),
     edges: template.edges.map((e) => ({
       ...e,

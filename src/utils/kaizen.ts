@@ -21,6 +21,7 @@ export type KaizenCategory =
   | 'jidoka'    // Автоматическая остановка
   | 'jit'       // Точно вовремя
   | 'flow'      // Поток создания ценности
+  | 'life'      // Жизненная система (целостность жизни)
 
 export type KaizenSeverity = 'critical' | 'warning' | 'suggestion' | 'pass'
 
@@ -41,6 +42,7 @@ export interface KaizenResult {
   nodeIds?: string[]    // Какие узлы затронуты
   suggestion?: string   // Как исправить
   principle: string
+  prompt?: string       // Готовый промпт для Claude чтобы исправить
 }
 
 // ===== Все правила Кайдзен =====
@@ -169,7 +171,83 @@ const KAIZEN_RULES: KaizenRule[] = [
     category: 'flow',
     principle: 'Поток должен быть сбалансирован. Единая точка отказа = высокий риск остановки.',
   },
+
+  // --- LIFE: Жизненная система ---
+  {
+    id: 'life-no-health',
+    name: 'Нет здоровья',
+    description: 'В системе нет блока про здоровье/спорт/тело',
+    category: 'life',
+    principle: '生活 Жизнь — здоровье = фундамент. Без энергии ни один процесс не работает на максимум.',
+  },
+  {
+    id: 'life-no-relationships',
+    name: 'Нет личной жизни',
+    description: 'В системе нет блока про отношения/семью/друзей',
+    category: 'life',
+    principle: '生活 Жизнь — человек без связей = изолированный узел. Отношения дают энергию и смысл.',
+  },
+  {
+    id: 'life-no-finance',
+    name: 'Нет финансов',
+    description: 'В системе нет блока про финансы/бюджет/инвестиции',
+    category: 'life',
+    principle: '生活 Жизнь — деньги = ресурс. Без контроля финансов система нестабильна.',
+  },
+  {
+    id: 'life-no-skills',
+    name: 'Нет навыков/обучения',
+    description: 'В системе нет блока про обучение/развитие/навыки',
+    category: 'life',
+    principle: '生活 Жизнь — без развития = деградация. Навыки = усилитель всех процессов.',
+  },
+  {
+    id: 'life-no-goals',
+    name: 'Нет целей в блоках',
+    description: 'Блоки без описания/целей — непонятно зачем они существуют',
+    category: 'life',
+    principle: '生活 Жизнь — процесс без цели = бессмысленное движение. Определи зачем.',
+  },
+  {
+    id: 'life-no-rest',
+    name: 'Нет отдыха/восстановления',
+    description: 'В системе нет блока про отдых, сон, восстановление',
+    category: 'life',
+    principle: '生活 Жизнь — система без отдыха = выгорание. Восстановление это не потеря, а инвестиция.',
+  },
+  {
+    id: 'life-no-routine',
+    name: 'Нет рутины/привычек',
+    description: 'Нет алгоритмизированного распорядка дня',
+    category: 'life',
+    principle: '生活 Жизнь — без привычек = хаос. Рутина = автоматизация жизненных процессов.',
+  },
+  {
+    id: 'life-unbalanced',
+    name: 'Дисбаланс жизни',
+    description: 'Слишком много блоков в одной сфере, ноль в другой',
+    category: 'life',
+    principle: '生活 Жизнь — перекос = хрупкость. Сбалансированная система устойчивее.',
+  },
 ]
+
+// ===== Генерация промпта из результата =====
+
+function generatePromptForResult(r: KaizenResult, nodes: FactoryNode[]): string {
+  const nodeNames = r.nodeIds
+    ?.map((id) => {
+      const n = nodes.find((nd) => nd.id === id)
+      return n ? `"${(n.data as FactoryNodeData).label}"` : id
+    })
+    .join(', ')
+
+  const base = `Кайдзен-анализ нашёл проблему в моей Life Factory схеме.`
+  const problem = `\nПроблема: ${r.ruleName} — ${r.message}`
+  const affected = nodeNames ? `\nЗатронутые блоки: ${nodeNames}` : ''
+  const fix = r.suggestion ? `\nРекомендация: ${r.suggestion}` : ''
+
+  return `${base}${problem}${affected}${fix}\n\nИсправь эту проблему в моей схеме.`
+}
 
 // ===== Анализатор =====
 
@@ -475,6 +553,103 @@ export function analyzeKaizen(
     }
   }
 
+  // --- LIFE: Жизненная система ---
+  // Собираем все лейблы (lowercase) для поиска сфер
+  const allLabels = nodes.map((n) => (getData(n).label as string).toLowerCase())
+  const allDescs = nodes.map((n) => ((getData(n).description as string) || '').toLowerCase())
+  const allText = [...allLabels, ...allDescs].join(' ')
+
+  const LIFE_AREAS: { id: string; keywords: string[]; name: string; ruleId: string; emoji: string }[] = [
+    { id: 'health', keywords: ['здоровь', 'спорт', 'фитнес', 'тренировк', 'тело', 'зож', 'питани', 'сон', 'health', 'gym'], name: 'Здоровье/Спорт', ruleId: 'life-no-health', emoji: '💪' },
+    { id: 'relationships', keywords: ['отношени', 'семь', 'личн', 'друз', 'любовь', 'девушк', 'парен', 'жен', 'муж', 'relationship', 'family'], name: 'Личная жизнь/Отношения', ruleId: 'life-no-relationships', emoji: '❤️' },
+    { id: 'finance', keywords: ['финанс', 'деньг', 'бюджет', 'инвестиц', 'доход', 'расход', 'накоплен', 'finance', 'money', 'invest'], name: 'Финансы', ruleId: 'life-no-finance', emoji: '💰' },
+    { id: 'skills', keywords: ['навык', 'обучен', 'курс', 'книг', 'развити', 'учёб', 'учеб', 'образован', 'skill', 'learn', 'study'], name: 'Навыки/Обучение', ruleId: 'life-no-skills', emoji: '📚' },
+    { id: 'rest', keywords: ['отдых', 'восстановлен', 'медитац', 'хобби', 'развлечен', 'отпуск', 'релакс', 'rest', 'hobby'], name: 'Отдых/Восстановление', ruleId: 'life-no-rest', emoji: '🧘' },
+    { id: 'routine', keywords: ['рутин', 'привычк', 'распорядок', 'расписани', 'утро', 'вечер', 'daily', 'routine', 'habit'], name: 'Рутина/Привычки', ruleId: 'life-no-routine', emoji: '⏰' },
+  ]
+
+  const foundAreas: string[] = []
+  const missingAreas: typeof LIFE_AREAS = []
+
+  for (const area of LIFE_AREAS) {
+    const found = area.keywords.some((kw) => allText.includes(kw))
+    if (found) {
+      foundAreas.push(area.id)
+    } else {
+      missingAreas.push(area)
+    }
+  }
+
+  for (const area of missingAreas) {
+    const rule = KAIZEN_RULES.find((r) => r.id === area.ruleId)
+    results.push({
+      ruleId: area.ruleId,
+      ruleName: `Нет: ${area.name}`,
+      category: 'life',
+      severity: area.id === 'health' || area.id === 'relationships' ? 'critical' : 'warning',
+      message: `${area.emoji} В твоей системе нет ничего про ${area.name.toLowerCase()}. Жизнь не алгоритмизирована полностью.`,
+      suggestion: `Создай контейнер «${area.name}» и опиши процессы внутри`,
+      principle: rule?.principle || '生活 — вся жизнь должна быть системой.',
+      prompt: `Добавь в мою мастер-схему Life Factory новый контейнер "${area.name}". Создай внутри него базовые процессы и связи. Это сфера жизни которая сейчас не алгоритмизирована — нужно добавить блоки, описать потоки и связать с остальной системой.`,
+    })
+  }
+
+  // Все сферы есть — pass
+  if (missingAreas.length === 0 && nodes.length > 0) {
+    results.push({
+      ruleId: 'life-complete',
+      ruleName: 'Жизнь алгоритмизирована',
+      category: 'life',
+      severity: 'pass',
+      message: 'Все ключевые сферы жизни представлены в системе',
+      principle: '生活 — полная жизненная система.',
+    })
+  }
+
+  // Дисбаланс: если бизнес-блоков > 5, а остальных сфер нет
+  const businessKeywords = ['бизнес', 'продаж', 'клиент', 'лид', 'маркетинг', 'выручк', 'mvp', 'продукт']
+  const businessCount = nodes.filter((n) => {
+    const label = (getData(n).label as string).toLowerCase()
+    return businessKeywords.some((kw) => label.includes(kw))
+  }).length
+  if (businessCount >= 3 && missingAreas.length >= 3) {
+    results.push({
+      ruleId: 'life-unbalanced',
+      ruleName: 'Дисбаланс жизни',
+      category: 'life',
+      severity: 'critical',
+      message: `${businessCount} блоков про бизнес, но ${missingAreas.length} сфер жизни отсутствуют. Перекос = выгорание.`,
+      suggestion: 'Добавь блоки для здоровья, отношений, навыков, отдыха',
+      principle: '生活 — перекос в одну сферу разрушает остальные. Баланс = устойчивость.',
+      prompt: `Моя Life Factory перекошена в бизнес (${businessCount} блоков), но отсутствуют: ${missingAreas.map(a => a.name).join(', ')}. Сбалансируй мою жизненную систему — добавь контейнеры для недостающих сфер жизни и свяжи их с бизнесом.`,
+    })
+  }
+
+  // Нет целей / описаний в блоках
+  const noDescription = nodes.filter(
+    (n) => getData(n).category !== 'schema' && n.type !== 'kanbanNode' && !getData(n).description
+  )
+  if (noDescription.length >= 2) {
+    results.push({
+      ruleId: 'life-no-goals',
+      ruleName: 'Нет целей в блоках',
+      category: 'life',
+      severity: 'warning',
+      message: `${noDescription.length} блоков без описания/целей: ${noDescription.slice(0, 3).map(n => getData(n).label).join(', ')}${noDescription.length > 3 ? '...' : ''}`,
+      nodeIds: noDescription.map((n) => n.id),
+      suggestion: 'Добавь описание и цель каждому блоку — зачем он существует?',
+      principle: '生活 — процесс без цели = бессмысленное движение.',
+      prompt: `В моей схеме ${noDescription.length} блоков без описания и целей: ${noDescription.map(n => getData(n).label).join(', ')}. Добавь каждому блоку осмысленное описание и конкретную цель — зачем этот процесс существует и что должен давать.`,
+    })
+  }
+
+  // --- Генерация промптов для всех результатов без prompt ---
+  for (const r of results) {
+    if (!r.prompt && r.severity !== 'pass') {
+      r.prompt = generatePromptForResult(r, nodes)
+    }
+  }
+
   // --- Пройденные проверки (pass) ---
   const failedIds = new Set(results.map((r) => r.ruleId))
   if (!failedIds.has('muda-defects') && nodes.length > 0) {
@@ -525,8 +700,6 @@ export function getKaizenScore(results: KaizenResult[]): {
   const warnings = results.filter((r) => r.severity === 'warning').length
   const suggestions = results.filter((r) => r.severity === 'suggestion').length
   const total = results.length
-  const problems = criticals + warnings + suggestions
-
   // Скор: 100 если нет проблем, минус за каждую
   const score = Math.max(0, Math.round(
     100 - criticals * 25 - warnings * 10 - suggestions * 3
@@ -537,6 +710,7 @@ export function getKaizenScore(results: KaizenResult[]): {
 
 // Категории для фильтра
 export const KAIZEN_CATEGORIES: { id: KaizenCategory; label: string; emoji: string; jp: string }[] = [
+  { id: 'life', label: 'Жизнь', emoji: '🧬', jp: '生活' },
   { id: 'muda', label: 'Потери', emoji: '🗑️', jp: '無駄' },
   { id: '5s', label: 'Организация', emoji: '🧹', jp: '5S' },
   { id: 'pdca', label: 'Цикл улучшений', emoji: '🔄', jp: 'PDCA' },

@@ -33,7 +33,9 @@ export async function GET() {
       const schemaFile = path.join(dirPath, 'schema.json')
       try {
         const content = await fs.readFile(schemaFile, 'utf-8')
-        schemas.push(JSON.parse(content))
+        const data = JSON.parse(content)
+        if (!data.version) data.version = '0.1'
+        schemas.push(data)
       } catch {
         // Пропускаем папки без schema.json
       }
@@ -77,6 +79,7 @@ export async function POST(request: Request) {
     const fullSchema = {
       ...schema,
       id: dirName,
+      version: schema.version || '0.1',
       createdAt: schema.createdAt || now,
       updatedAt: now,
     }

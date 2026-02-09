@@ -17,6 +17,7 @@ function getBallCount(flowSpeed: number, isMobile: boolean): number {
 
 function AnimatedEdgeComponent({
   id,
+  source,
   sourceX,
   sourceY,
   targetX,
@@ -26,10 +27,35 @@ function AnimatedEdgeComponent({
   data,
   selected,
 }: EdgeProps<FactoryEdge>) {
-  const deleteEdge = useFactoryStore((s) => s.deleteEdge)
+  // Check if this edge's source is blocked (bottleneck or downstream of one)
+  const isBlocked = useFactoryStore((s) => {
+    const bottleneckIds = new Set<string>()
+    for (const n of s.nodes) {
+      if (n.data.status === 'bottleneck' || n.data.status === 'inactive') {
+        bottleneckIds.add(n.id)
+      }
+    }
+    if (bottleneckIds.size === 0) return false
+    if (bottleneckIds.has(source)) return true
+
+    // BFS: find all nodes downstream of bottlenecks
+    const blocked = new Set<string>(bottleneckIds)
+    const queue = [...bottleneckIds]
+    while (queue.length > 0) {
+      const cur = queue.shift()!
+      for (const e of s.edges) {
+        if (e.source === cur && !blocked.has(e.target)) {
+          blocked.add(e.target)
+          queue.push(e.target)
+        }
+      }
+    }
+    return blocked.has(source)
+  })
+
   const flowSpeed = (data?.flowSpeed as number) ?? 3
   const flowVolume = (data?.flowVolume as number) ?? 50
-  const isAnimated = (data?.animated as boolean) ?? true
+  const isAnimated = ((data?.animated as boolean) ?? true) && !isBlocked
 
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
@@ -47,33 +73,26 @@ function AnimatedEdgeComponent({
     [flowSpeed, isMobile]
   )
 
-  const ballColor = flowVolume < 20 ? '#ef4444' : '#facc15'
+  const ballColor = isBlocked ? '#475569' : flowVolume < 20 ? '#ef4444' : '#facc15'
   const duration = Math.max(1, 8 - flowSpeed)
   const ballRadius = Math.max(3, Math.min(6, flowVolume / 15))
 
   return (
     <>
-      {/* Невидимая толстая линия для удобного клика */}
-      <path
-        d={edgePath}
-        fill="none"
-        stroke="transparent"
-        strokeWidth={20}
-        className="cursor-pointer"
-      />
-
       {/* Основная линия */}
       <BaseEdge
         id={id}
         path={edgePath}
         style={{
-          stroke: selected ? '#f8fafc' : '#475569',
+          stroke: isBlocked ? '#334155' : selected ? '#f8fafc' : '#475569',
           strokeWidth: selected ? 2.5 : 1.5,
           strokeDasharray: isAnimated ? undefined : '5 5',
+          opacity: isBlocked ? 0.4 : 1,
+          transition: 'stroke 0.5s, opacity 0.5s',
         }}
       />
 
-      {/* Анимированные шарики */}
+      {/* Анимированные шарики — только если не заблокирован */}
       {isAnimated && (
         <g>
           {Array.from({ length: ballCount }).map((_, i) => (
@@ -103,26 +122,8 @@ function AnimatedEdgeComponent({
         </g>
       )}
 
-      {/* Кнопка удаления при выделении */}
-      {selected && (
-        <EdgeLabelRenderer>
-          <button
-            onClick={(e) => {
-              e.stopPropagation()
-              deleteEdge(id)
-            }}
-            className="pointer-events-auto absolute flex items-center justify-center w-7 h-7 rounded-full bg-red-500 hover:bg-red-400 text-white text-sm font-bold shadow-lg shadow-red-500/30 transition-all hover:scale-110 cursor-pointer"
-            style={{
-              transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
-            }}
-          >
-            x
-          </button>
-        </EdgeLabelRenderer>
-      )}
-
       {/* Лейбл на связи */}
-      {data?.label && !selected && (
+      {data?.label && (
         <EdgeLabelRenderer>
           <div
             className="absolute pointer-events-none px-1.5 py-0.5 rounded text-[10px] text-slate-400 bg-slate-900/80"

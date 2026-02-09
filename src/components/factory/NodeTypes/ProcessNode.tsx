@@ -5,6 +5,22 @@ import { Handle, Position, type NodeProps } from '@xyflow/react'
 import type { FactoryNode, FactoryNodeData } from '@/types/factory'
 import { useFactoryStore } from '@/store/useFactoryStore'
 
+// Ключевые слова для определения "финансовых" узлов
+const INCOME_KEYWORDS = ['доход', 'деньги', 'прибыль', 'зарплата', 'выручка', 'оплата', 'касса', 'revenue', 'income', 'profit']
+
+function isIncomeNode(label: string, emoji: string, category: string): boolean {
+  const lower = label.toLowerCase()
+  if (INCOME_KEYWORDS.some(kw => lower.includes(kw))) return true
+  if (['💰', '💵', '💸', '🤑', '💲', '💎', '🪙'].includes(emoji)) return true
+  return false
+}
+
+function formatMoney(value: number): string {
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`
+  if (value >= 1_000) return `${(value / 1_000).toFixed(0)}K`
+  return value.toLocaleString('ru-RU')
+}
+
 // Стрелка тренда
 function TrendArrow({ trend }: { trend: 'up' | 'down' | 'stable' }) {
   if (trend === 'up') return <span className="text-green-400">↑</span>
@@ -37,7 +53,13 @@ const STATUS_OPTIONS: { value: FactoryNodeData['status']; label: string; icon: s
 function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
   const updateNodeData = useFactoryStore((s) => s.updateNodeData)
   const deleteNode = useFactoryStore((s) => s.deleteNode)
+  const convertNodeToSchema = useFactoryStore((s) => s.convertNodeToSchema)
+  const setFiveWhysNodeId = useFactoryStore((s) => s.setFiveWhysNodeId)
   const [showMenu, setShowMenu] = useState(false)
+
+  const showValue = isIncomeNode(data.label as string, data.emoji as string, data.category as string)
+  const hasIntegration = !!data.integration && (data.integration as { status: string }).status === 'connected'
+  const hasMetrics = !!data.metrics
 
   const isBottleneck = data.status === 'bottleneck'
   const isWarning = data.status === 'warning'
@@ -46,6 +68,10 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
   const handleStatusChange = (status: FactoryNodeData['status']) => {
     updateNodeData(id, { status })
     setShowMenu(false)
+    // Если ставим bottleneck — запускаем 5 Почему
+    if (status === 'bottleneck') {
+      setFiveWhysNodeId(id)
+    }
   }
 
   return (
@@ -103,49 +129,49 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
           type="target"
           position={Position.Left}
           id="left-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="source"
           position={Position.Left}
           id="left-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="target"
           position={Position.Right}
           id="right-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="source"
           position={Position.Right}
           id="right-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="target"
           position={Position.Top}
           id="top-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="source"
           position={Position.Top}
           id="top-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="target"
           position={Position.Bottom}
           id="bottom-in"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
         <Handle
           type="source"
           position={Position.Bottom}
           id="bottom-out"
-          className="w-2.5! h-2.5! bg-slate-600! border-2! border-slate-400! hover:bg-blue-500! hover:border-blue-400! transition-colors!"
+          className="w-1! h-1! opacity-0! pointer-events-none!"
         />
 
         {/* Индикатор интеграции */}
@@ -174,6 +200,28 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
             {data.label as string}
           </span>
         </div>
+
+        {/* Живой счётчик — данные из интеграции */}
+        {showValue && (
+          <div className="mt-1.5">
+            {hasMetrics ? (
+              <div className="flex items-center justify-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/15 border border-emerald-500/25">
+                <span className="text-emerald-400 text-xs font-bold font-mono tracking-wide">
+                  ₸ {formatMoney((data.metrics as { current: number }).current)}
+                </span>
+                <TrendArrow trend={(data.metrics as { trend: 'up' | 'down' | 'stable' }).trend} />
+              </div>
+            ) : hasIntegration ? (
+              <div className="flex items-center justify-center gap-1 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                <span className="text-emerald-500/60 text-[10px] animate-pulse">Загрузка...</span>
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-1 px-1.5 py-0.5 rounded bg-slate-800/40 border border-dashed border-slate-600/40">
+                <span className="text-slate-500 text-[9px]">📡 Подключи источник</span>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Метрики */}
         {data.metrics && (
@@ -236,6 +284,17 @@ function ProcessNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
               </button>
             ))}
             <div className="border-t border-slate-700">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  convertNodeToSchema(id)
+                  setShowMenu(false)
+                }}
+                className="w-full text-left px-3 py-2 text-sm text-purple-400 hover:bg-purple-500/10 flex items-center gap-2 transition-colors"
+              >
+                <span>📂</span>
+                <span>В контейнер</span>
+              </button>
               <button
                 onClick={(e) => {
                   e.stopPropagation()

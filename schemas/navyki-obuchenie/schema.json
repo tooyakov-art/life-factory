@@ -1,0 +1,150 @@
+{
+  "id": "navyki-obuchenie",
+  "name": "Навыки/Обучение",
+  "description": "Непрерывное обучение и развитие навыков — усилитель всех жизненных процессов",
+  "category": "skills",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "node-study",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 100
+      },
+      "data": {
+        "label": "Учёба",
+        "emoji": "📚",
+        "category": "process",
+        "color": "#8b5cf6",
+        "description": "Изучение теории: книги, курсы, видео. Цель: минимум 1 час в день",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 7,
+          "trend": "stable",
+          "unit": "часов/нед"
+        }
+      }
+    },
+    {
+      "id": "node-practice",
+      "type": "processNode",
+      "position": {
+        "x": 300,
+        "y": 100
+      },
+      "data": {
+        "label": "Практика",
+        "emoji": "💻",
+        "category": "process",
+        "color": "#8b5cf6",
+        "description": "Применение знаний на практике. Цель: каждый день делать что-то руками",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 10,
+          "trend": "stable",
+          "unit": "часов/нед"
+        }
+      }
+    },
+    {
+      "id": "node-mentor",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 280
+      },
+      "data": {
+        "label": "Менторство",
+        "emoji": "🧑‍🏫",
+        "category": "input",
+        "color": "#f59e0b",
+        "description": "Обучение у менторов и экспертов. Цель: ускорить рост через чужой опыт",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-competence",
+      "type": "processNode",
+      "position": {
+        "x": 550,
+        "y": 190
+      },
+      "data": {
+        "label": "Компетенция",
+        "emoji": "🎯",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Уровень профессиональных навыков. Результат системного обучения",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-study-practice",
+      "source": "node-study",
+      "target": "node-practice",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-mentor-practice",
+      "source": "node-mentor",
+      "target": "node-practice",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-practice-competence",
+      "source": "node-practice",
+      "target": "node-competence",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 5,
+        "flowVolume": 70,
+        "animated": true,
+        "label": "Рост навыков"
+      }
+    }
+  ],
+  "tasks": [],
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ],
+  "createdAt": "2026-02-09T17:58:08.364Z",
+  "updatedAt": "2026-02-09T17:58:08.364Z"
+}

@@ -1,0 +1,162 @@
+{
+  "id": "lichnaya-zhizn",
+  "name": "Личная жизнь/Отношения",
+  "description": "Семья, друзья, общение — отношения дают энергию, смысл и поддержку",
+  "category": "life",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "node-close",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 100
+      },
+      "data": {
+        "label": "Время с близкими",
+        "emoji": "👨‍👩‍👧",
+        "category": "process",
+        "color": "#ec4899",
+        "description": "Качественное время с семьёй и близкими. Цель: минимум 2 часа каждый день",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 14,
+          "trend": "stable",
+          "unit": "часов/нед"
+        }
+      }
+    },
+    {
+      "id": "node-social",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 280
+      },
+      "data": {
+        "label": "Общение",
+        "emoji": "💬",
+        "category": "process",
+        "color": "#ec4899",
+        "description": "Встречи с друзьями и нетворкинг. Цель: поддерживать социальные связи",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 3,
+          "trend": "stable",
+          "unit": "встреч/нед"
+        }
+      }
+    },
+    {
+      "id": "node-new",
+      "type": "processNode",
+      "position": {
+        "x": 300,
+        "y": 190
+      },
+      "data": {
+        "label": "Новые знакомства",
+        "emoji": "🤝",
+        "category": "input",
+        "color": "#f59e0b",
+        "description": "Расширение круга общения. Цель: новые полезные контакты и дружба",
+        "status": "active"
+      }
+    },
+    {
+      "id": "node-support",
+      "type": "processNode",
+      "position": {
+        "x": 550,
+        "y": 190
+      },
+      "data": {
+        "label": "Поддержка",
+        "emoji": "💪",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Эмоциональная поддержка и мотивация от окружения. Результат здоровых отношений",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-close-support",
+      "source": "node-close",
+      "target": "node-support",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-social-new",
+      "source": "node-social",
+      "target": "node-new",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-new-close",
+      "source": "node-new",
+      "target": "node-close",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 2,
+        "flowVolume": 30,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-social-support",
+      "source": "node-social",
+      "target": "node-support",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    }
+  ],
+  "tasks": [],
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ],
+  "createdAt": "2026-02-09T17:58:08.364Z",
+  "updatedAt": "2026-02-09T17:58:08.364Z"
+}

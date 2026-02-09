@@ -24,54 +24,12 @@
         "height": 102
       },
       "selected": true
-    },
-    {
-      "id": "kaizen-1770659235841",
-      "type": "kaizenNode",
-      "position": {
-        "x": 1015.3249859186922,
-        "y": -258.73221794519856
-      },
-      "data": {
-        "label": "Кайдзен",
-        "emoji": "改",
-        "category": "alert",
-        "color": "#f59e0b",
-        "status": "active"
-      },
-      "measured": {
-        "width": 320,
-        "height": 536
-      },
-      "selected": false,
-      "dragging": false
-    },
-    {
-      "id": "kanban-1770659236806",
-      "type": "kanbanNode",
-      "position": {
-        "x": 14.858818547613652,
-        "y": -285.31439439071295
-      },
-      "data": {
-        "label": "План",
-        "emoji": "📌",
-        "category": "process",
-        "color": "#8b5cf6",
-        "status": "active"
-      },
-      "measured": {
-        "width": 520,
-        "height": 246
-      },
-      "selected": false,
-      "dragging": false
     }
   ],
   "edges": [],
   "tasks": [],
   "createdAt": "2026-02-08T00:00:00.000Z",
-  "updatedAt": "2026-02-09T18:01:41.046Z",
+  "updatedAt": "2026-02-09T17:48:28.029Z",
   "version": "0.1",
   "kanbanColumns": [
     {

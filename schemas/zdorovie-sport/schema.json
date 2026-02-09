@@ -1,0 +1,169 @@
+{
+  "id": "zdorovie-sport",
+  "name": "Здоровье/Спорт",
+  "description": "Физическое здоровье, тренировки, питание, сон — источник энергии для всей жизненной системы",
+  "category": "life",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "node-training",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 100
+      },
+      "data": {
+        "label": "Тренировка",
+        "emoji": "🏋️",
+        "category": "process",
+        "color": "#22c55e",
+        "description": "Регулярные физические нагрузки. Цель: 3-4 тренировки в неделю",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 4,
+          "trend": "stable",
+          "unit": "тренировок/нед"
+        }
+      }
+    },
+    {
+      "id": "node-nutrition",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 280
+      },
+      "data": {
+        "label": "Питание",
+        "emoji": "🥗",
+        "category": "process",
+        "color": "#22c55e",
+        "description": "Сбалансированное питание. Цель: контроль калорий и нутриентов",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 2000,
+          "trend": "stable",
+          "unit": "ккал/день"
+        }
+      }
+    },
+    {
+      "id": "node-sleep",
+      "type": "processNode",
+      "position": {
+        "x": 300,
+        "y": 190
+      },
+      "data": {
+        "label": "Сон",
+        "emoji": "😴",
+        "category": "process",
+        "color": "#3b82f6",
+        "description": "Качественный сон 7-8 часов. Цель: полное восстановление организма",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 8,
+          "trend": "stable",
+          "unit": "часов/ночь"
+        }
+      }
+    },
+    {
+      "id": "node-energy",
+      "type": "processNode",
+      "position": {
+        "x": 550,
+        "y": 190
+      },
+      "data": {
+        "label": "Энергия",
+        "emoji": "⚡",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Уровень жизненной энергии. Цель: стабильно высокая продуктивность каждый день",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-training-sleep",
+      "source": "node-training",
+      "target": "node-sleep",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-nutrition-energy",
+      "source": "node-nutrition",
+      "target": "node-energy",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-sleep-energy",
+      "source": "node-sleep",
+      "target": "node-energy",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 5,
+        "flowVolume": 70,
+        "animated": true,
+        "label": "Восстановление"
+      }
+    },
+    {
+      "id": "e-training-energy",
+      "source": "node-training",
+      "target": "node-energy",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 50,
+        "animated": true
+      }
+    }
+  ],
+  "tasks": [],
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ],
+  "createdAt": "2026-02-09T17:58:08.364Z",
+  "updatedAt": "2026-02-09T17:58:08.364Z"
+}

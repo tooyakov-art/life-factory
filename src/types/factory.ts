@@ -30,6 +30,8 @@ export interface FactoryNodeData {
     status: 'connected' | 'disconnected' | 'error'
     lastSync?: string
   }
+  // Числовое значение (доход, расход, сумма и т.д.)
+  value?: number
   // Статус узла
   status: 'active' | 'bottleneck' | 'inactive' | 'warning'
   // Ссылка на вложенную схему (для SchemaNode)
@@ -46,15 +48,35 @@ export interface FactoryEdgeData {
 }
 
 // Типизированные React Flow узлы и связи
-export type FactoryNode = Node<FactoryNodeData, 'processNode' | 'schemaNode'>
+export type FactoryNode = Node<FactoryNodeData, 'processNode' | 'schemaNode' | 'kanbanNode' | 'kaizenNode'>
 export type FactoryEdge = Edge<FactoryEdgeData>
+
+// Канбан-колонка (кастомная)
+export interface KanbanColumn {
+  id: string
+  label: string
+  emoji: string
+  color: string
+}
+
+// Дефолтные колонки — планирование по времени
+export const DEFAULT_KANBAN_COLUMNS: KanbanColumn[] = [
+  { id: 'year', label: 'В этом году', emoji: '📅', color: '#6366f1' },
+  { id: 'month', label: 'В этом месяце', emoji: '🗓️', color: '#8b5cf6' },
+  { id: 'week', label: 'Неделя', emoji: '📋', color: '#3b82f6' },
+  { id: 'tomorrow', label: 'Завтра', emoji: '⏳', color: '#f59e0b' },
+  { id: 'today', label: 'Сегодня', emoji: '🔥', color: '#ef4444' },
+  { id: 'done', label: 'Готово', emoji: '✅', color: '#22c55e' },
+]
 
 // Канбан-задача
 export interface KanbanTask {
   id: string
   title: string
-  status: 'todo' | 'doing' | 'done'
+  columnId: string            // ID колонки (было status)
   createdAt: string
+  completedAt?: string        // Когда выполнено
+  completedVersion?: string   // Версия схемы при выполнении (v0.1, v0.2)
 }
 
 // Схема — одна "фабрика"
@@ -63,9 +85,11 @@ export interface Schema {
   name: string
   description?: string
   category: 'business' | 'finance' | 'skills' | 'life' | 'master'
+  version: string             // "0.1", "0.2", ...
   nodes: FactoryNode[]
   edges: FactoryEdge[]
   tasks?: KanbanTask[]
+  kanbanColumns?: KanbanColumn[]
   createdAt: string
   updatedAt: string
 }

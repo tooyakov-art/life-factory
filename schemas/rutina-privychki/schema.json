@@ -1,0 +1,155 @@
+{
+  "id": "rutina-privychki",
+  "name": "Рутина/Привычки",
+  "description": "Ежедневные ритуалы и привычки — автоматизация жизненных процессов через дисциплину",
+  "category": "life",
+  "version": "0.1",
+  "nodes": [
+    {
+      "id": "node-morning",
+      "type": "processNode",
+      "position": {
+        "x": 50,
+        "y": 190
+      },
+      "data": {
+        "label": "Утренний ритуал",
+        "emoji": "🌅",
+        "category": "process",
+        "color": "#f97316",
+        "description": "Утренняя рутина: подъём, зарядка, планирование. Цель: стабильный старт дня",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 100,
+          "trend": "stable",
+          "unit": "% выполнения"
+        }
+      }
+    },
+    {
+      "id": "node-planning",
+      "type": "processNode",
+      "position": {
+        "x": 300,
+        "y": 100
+      },
+      "data": {
+        "label": "Планирование дня",
+        "emoji": "📋",
+        "category": "process",
+        "color": "#f97316",
+        "description": "Постановка задач и приоритетов на день. Цель: не больше 3 главных задач",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 100,
+          "trend": "stable",
+          "unit": "% выполнения"
+        }
+      }
+    },
+    {
+      "id": "node-evening",
+      "type": "processNode",
+      "position": {
+        "x": 300,
+        "y": 280
+      },
+      "data": {
+        "label": "Вечерний ритуал",
+        "emoji": "🌃",
+        "category": "process",
+        "color": "#f97316",
+        "description": "Рефлексия, подготовка ко сну, благодарность. Цель: спокойное завершение дня",
+        "status": "active",
+        "metrics": {
+          "current": 0,
+          "target": 100,
+          "trend": "stable",
+          "unit": "% выполнения"
+        }
+      }
+    },
+    {
+      "id": "node-discipline",
+      "type": "processNode",
+      "position": {
+        "x": 550,
+        "y": 190
+      },
+      "data": {
+        "label": "Дисциплина",
+        "emoji": "🎯",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Уровень самодисциплины. Результат системных привычек и ритуалов",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-morning-planning",
+      "source": "node-morning",
+      "target": "node-planning",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-planning-discipline",
+      "source": "node-planning",
+      "target": "node-discipline",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 4,
+        "flowVolume": 60,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-evening-discipline",
+      "source": "node-evening",
+      "target": "node-discipline",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 40,
+        "animated": true
+      }
+    }
+  ],
+  "tasks": [],
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ],
+  "createdAt": "2026-02-09T17:58:08.364Z",
+  "updatedAt": "2026-02-09T17:58:08.364Z"
+}

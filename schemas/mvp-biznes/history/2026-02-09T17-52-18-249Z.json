@@ -1,7 +1,7 @@
 {
   "id": "mvp-biznes",
   "name": "MVP Бизнес",
-  "description": "Алгоритм запуска бизнеса по MVP-методологии: идея → валидация → прототип → MVP → первые клиенты → масштабирование",
+  "description": "Алгоритм запуска бизнеса по MVP-методологии: идея → валидация → MVP → первые клиенты → масштабирование",
   "category": "business",
   "nodes": [
     {
@@ -16,9 +16,13 @@
         "emoji": "💡",
         "category": "input",
         "color": "#22c55e",
-        "description": "Генерация и отбор бизнес-идей. Цель: найти проблему, за решение которой люди готовы платить",
         "status": "active"
-      }
+      },
+      "measured": {
+        "width": 98,
+        "height": 39
+      },
+      "selected": false
     },
     {
       "id": "node-research",
@@ -32,15 +36,14 @@
         "emoji": "🔍",
         "category": "process",
         "color": "#3b82f6",
-        "description": "Исследование конкурентов и объёма рынка. Цель: убедиться что есть спрос и место для продукта",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 10,
-          "trend": "stable",
-          "unit": "конкурентов"
-        }
-      }
+        "status": "active"
+      },
+      "measured": {
+        "width": 160,
+        "height": 39
+      },
+      "selected": false,
+      "dragging": false
     },
     {
       "id": "node-audience",
@@ -54,43 +57,18 @@
         "emoji": "🎯",
         "category": "process",
         "color": "#3b82f6",
-        "description": "Сегментация целевых клиентов. Цель: точно знать кому продаём и какую боль решаем",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 3,
-          "trend": "stable",
-          "unit": "сегментов"
-        }
-      }
-    },
-    {
-      "id": "node-prototype",
-      "type": "processNode",
-      "position": {
-        "x": 480,
-        "y": 200
+        "status": "active"
       },
-      "data": {
-        "label": "Прототип",
-        "emoji": "🔧",
-        "category": "process",
-        "color": "#a855f7",
-        "description": "Сборка первой версии продукта из исследований и ЦА. Цель: быстро собрать рабочий прототип",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 1,
-          "trend": "stable",
-          "unit": "прототипов"
-        }
+      "measured": {
+        "width": 197,
+        "height": 39
       }
     },
     {
       "id": "node-mvp",
       "type": "processNode",
       "position": {
-        "x": 660,
+        "x": 530,
         "y": 200
       },
       "data": {
@@ -98,21 +76,18 @@
         "emoji": "🚀",
         "category": "process",
         "color": "#8b5cf6",
-        "description": "Минимальный жизнеспособный продукт. Цель: простейшее решение для проверки гипотезы",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 5,
-          "trend": "stable",
-          "unit": "функций"
-        }
+        "status": "active"
+      },
+      "measured": {
+        "width": 94,
+        "height": 39
       }
     },
     {
       "id": "node-test",
       "type": "processNode",
       "position": {
-        "x": 870,
+        "x": 760,
         "y": 100
       },
       "data": {
@@ -120,21 +95,19 @@
         "emoji": "🧪",
         "category": "process",
         "color": "#f59e0b",
-        "description": "Проверка продукта на реальных пользователях. Цель: валидировать или опровергнуть гипотезу данными",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 5,
-          "trend": "stable",
-          "unit": "гипотез"
-        }
-      }
+        "status": "active"
+      },
+      "measured": {
+        "width": 161,
+        "height": 39
+      },
+      "selected": false
     },
     {
       "id": "node-feedback",
       "type": "schemaNode",
       "position": {
-        "x": 870,
+        "x": 760,
         "y": 320
       },
       "data": {
@@ -144,13 +117,18 @@
         "color": "#ec4899",
         "status": "active",
         "referencedSchemaId": "обратная-связь"
-      }
+      },
+      "measured": {
+        "width": 183,
+        "height": 102
+      },
+      "selected": false
     },
     {
       "id": "node-clients",
       "type": "processNode",
       "position": {
-        "x": 1100,
+        "x": 1000,
         "y": 200
       },
       "data": {
@@ -158,15 +136,18 @@
         "emoji": "👥",
         "category": "input",
         "color": "#22c55e",
-        "description": "Привлечение первых платящих клиентов. Цель: доказать что продукт решает реальную проблему",
         "status": "active"
+      },
+      "measured": {
+        "width": 179,
+        "height": 39
       }
     },
     {
       "id": "node-sales",
       "type": "processNode",
       "position": {
-        "x": 1330,
+        "x": 1230,
         "y": 120
       },
       "data": {
@@ -174,21 +155,18 @@
         "emoji": "🤝",
         "category": "process",
         "color": "#f59e0b",
-        "description": "Конвертация лидов в оплату. Цель: создать повторяемый процесс продаж",
-        "status": "active",
-        "metrics": {
-          "current": 0,
-          "target": 10,
-          "trend": "stable",
-          "unit": "% конверсии"
-        }
+        "status": "active"
+      },
+      "measured": {
+        "width": 126,
+        "height": 39
       }
     },
     {
       "id": "node-revenue",
       "type": "processNode",
       "position": {
-        "x": 1560,
+        "x": 1460,
         "y": 200
       },
       "data": {
@@ -196,15 +174,19 @@
         "emoji": "💰",
         "category": "output",
         "color": "#10b981",
-        "description": "Денежный поток от продаж. Цель: выйти на стабильный положительный cash flow",
         "status": "active"
-      }
+      },
+      "measured": {
+        "width": 144,
+        "height": 64
+      },
+      "selected": false
     },
     {
       "id": "node-scale",
       "type": "processNode",
       "position": {
-        "x": 1330,
+        "x": 1230,
         "y": 320
       },
       "data": {
@@ -212,16 +194,40 @@
         "emoji": "📈",
         "category": "amplifier",
         "color": "#ec4899",
-        "description": "Рост бизнеса через автоматизацию и расширение. Цель: увеличить доход без пропорционального роста затрат",
         "status": "active"
+      },
+      "measured": {
+        "width": 193,
+        "height": 39
       }
+    },
+    {
+      "id": "kanban-1770657448163",
+      "type": "kanbanNode",
+      "position": {
+        "x": 1578.0542036814545,
+        "y": -317.0704960932343
+      },
+      "data": {
+        "label": "План",
+        "emoji": "📌",
+        "category": "process",
+        "color": "#8b5cf6",
+        "status": "active"
+      },
+      "measured": {
+        "width": 520,
+        "height": 402
+      },
+      "selected": false,
+      "dragging": false
     },
     {
       "id": "kaizen-1770658907998",
       "type": "kaizenNode",
       "position": {
-        "x": 1979.798,
-        "y": 217.089
+        "x": 1979.7976134203373,
+        "y": 217.08897417308341
       },
       "data": {
         "label": "Кайдзен",
@@ -233,7 +239,9 @@
       "measured": {
         "width": 320,
         "height": 536
-      }
+      },
+      "selected": false,
+      "dragging": false
     }
   ],
   "edges": [
@@ -261,46 +269,33 @@
         "flowSpeed": 3,
         "flowVolume": 50,
         "animated": true
-      }
+      },
+      "selected": false
     },
     {
-      "id": "e-research-prototype",
+      "id": "e-research-mvp",
       "source": "node-research",
-      "target": "node-prototype",
-      "sourceHandle": "right-out",
-      "targetHandle": "left-in",
-      "type": "animatedEdge",
-      "data": {
-        "flowSpeed": 3,
-        "flowVolume": 50,
-        "animated": true
-      }
-    },
-    {
-      "id": "e-audience-prototype",
-      "source": "node-audience",
-      "target": "node-prototype",
-      "sourceHandle": "right-out",
-      "targetHandle": "left-in",
-      "type": "animatedEdge",
-      "data": {
-        "flowSpeed": 3,
-        "flowVolume": 50,
-        "animated": true
-      }
-    },
-    {
-      "id": "e-prototype-mvp",
-      "source": "node-prototype",
       "target": "node-mvp",
       "sourceHandle": "right-out",
       "targetHandle": "left-in",
       "type": "animatedEdge",
       "data": {
-        "flowSpeed": 4,
-        "flowVolume": 60,
-        "animated": true,
-        "label": "Сборка"
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
+      }
+    },
+    {
+      "id": "e-audience-mvp",
+      "source": "node-audience",
+      "target": "node-mvp",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": {
+        "flowSpeed": 3,
+        "flowVolume": 50,
+        "animated": true
       }
     },
     {
@@ -330,9 +325,9 @@
       }
     },
     {
-      "id": "e-feedback-prototype",
+      "id": "e-feedback-mvp",
       "source": "node-feedback",
-      "target": "node-prototype",
+      "target": "node-mvp",
       "sourceHandle": "left-out",
       "targetHandle": "bottom-in",
       "type": "animatedEdge",
@@ -341,7 +336,8 @@
         "flowVolume": 20,
         "animated": true,
         "label": "Итерация"
-      }
+      },
+      "selected": false
     },
     {
       "id": "e-test-clients",
@@ -408,11 +404,73 @@
         "flowVolume": 50,
         "animated": true
       }
-    },
+    }
   ],
-  "tasks": [],
+  "tasks": [
+    {
+      "id": "t1",
+      "title": "Описать идею продукта",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    },
+    {
+      "id": "t2",
+      "title": "Изучить конкурентов",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    },
+    {
+      "id": "t3",
+      "title": "Определить ЦА и боль",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    },
+    {
+      "id": "t4",
+      "title": "Собрать MVP за неделю",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    },
+    {
+      "id": "t5",
+      "title": "Найти 10 тестовых клиентов",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    },
+    {
+      "id": "t6",
+      "title": "Провести первую продажу",
+      "status": "todo",
+      "createdAt": "2026-02-09T00:00:00.000Z",
+      "columnId": "ideas"
+    }
+  ],
   "createdAt": "2026-02-09T00:00:00.000Z",
-  "updatedAt": "2026-02-09T17:58:08.363Z",
-  "version": "0.3",
-  "kanbanColumns": []
+  "updatedAt": "2026-02-09T17:52:18.248Z",
+  "version": "0.2",
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ]
 }
