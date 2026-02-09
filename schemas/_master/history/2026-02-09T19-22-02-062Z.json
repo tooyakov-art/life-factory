@@ -1,0 +1,96 @@
+{
+  "id": "_master",
+  "name": "Мастер-схема",
+  "description": "Все сферы жизни как единая фабрика: бизнес, финансы, навыки, здоровье, отношения",
+  "category": "master",
+  "nodes": [
+    {
+      "id": "schema-node-mvp",
+      "type": "schemaNode",
+      "position": {
+        "x": 300,
+        "y": 200
+      },
+      "data": {
+        "label": "MVP Бизнес",
+        "emoji": "📂",
+        "category": "schema",
+        "color": "#3b82f6",
+        "status": "active",
+        "referencedSchemaId": "mvp-biznes"
+      },
+      "measured": {
+        "width": 169,
+        "height": 102
+      },
+      "selected": true
+    },
+    {
+      "id": "kaizen-1770659235841",
+      "type": "kaizenNode",
+      "position": {
+        "x": 1015.3249859186922,
+        "y": -258.73221794519856
+      },
+      "data": {
+        "label": "Кайдзен",
+        "emoji": "改",
+        "category": "alert",
+        "color": "#f59e0b",
+        "status": "active"
+      },
+      "measured": {
+        "width": 320,
+        "height": 536
+      },
+      "selected": false,
+      "dragging": false
+    },
+    {
+      "id": "kanban-1770659236806",
+      "type": "kanbanNode",
+      "position": {
+        "x": 14.858818547613652,
+        "y": -285.31439439071295
+      },
+      "data": {
+        "label": "План",
+        "emoji": "📌",
+        "category": "process",
+        "color": "#8b5cf6",
+        "status": "active"
+      },
+      "measured": {
+        "width": 520,
+        "height": 246
+      },
+      "selected": false,
+      "dragging": false
+    }
+  ],
+  "edges": [],
+  "tasks": [],
+  "createdAt": "2026-02-08T00:00:00.000Z",
+  "updatedAt": "2026-02-09T19:22:02.058Z",
+  "version": "0.1",
+  "kanbanColumns": [
+    {
+      "id": "ideas",
+      "label": "Все мысли",
+      "emoji": "💭",
+      "color": "#8b5cf6"
+    },
+    {
+      "id": "doing",
+      "label": "На карандаш",
+      "emoji": "✏️",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "done",
+      "label": "Сделано",
+      "emoji": "✅",
+      "color": "#22c55e"
+    }
+  ]
+}
