@@ -1,0 +1,152 @@
+{
+  "id": "finansy",
+  "name": "Финансы",
+  "description": "Управление личными финансами: доходы, расходы, бюджет, инвестиции, подушка безопасности",
+  "category": "finance",
+  "nodes": [
+    {
+      "id": "node-income",
+      "type": "processNode",
+      "position": { "x": 50, "y": 200 },
+      "data": {
+        "label": "Доходы",
+        "emoji": "💰",
+        "category": "input",
+        "color": "#22c55e",
+        "description": "Все источники дохода: зарплата, фриланс, бизнес, пассивный доход",
+        "status": "active",
+        "metrics": { "current": 0, "target": 500000, "trend": "stable", "unit": "₸/мес" }
+      }
+    },
+    {
+      "id": "node-budget",
+      "type": "processNode",
+      "position": { "x": 300, "y": 200 },
+      "data": {
+        "label": "Бюджет",
+        "emoji": "📊",
+        "category": "process",
+        "color": "#3b82f6",
+        "description": "Распределение денег по категориям: 50/30/20 или своя система",
+        "status": "active",
+        "metrics": { "current": 0, "target": 100, "trend": "stable", "unit": "% распределено" }
+      }
+    },
+    {
+      "id": "node-expenses",
+      "type": "processNode",
+      "position": { "x": 550, "y": 100 },
+      "data": {
+        "label": "Расходы",
+        "emoji": "🛒",
+        "category": "process",
+        "color": "#ef4444",
+        "description": "Обязательные и необязательные траты. Цель: оптимизировать без потери качества жизни",
+        "status": "active",
+        "metrics": { "current": 0, "target": 300000, "trend": "stable", "unit": "₸/мес" }
+      }
+    },
+    {
+      "id": "node-savings",
+      "type": "processNode",
+      "position": { "x": 550, "y": 300 },
+      "data": {
+        "label": "Подушка безопасности",
+        "emoji": "🛡️",
+        "category": "process",
+        "color": "#f59e0b",
+        "description": "Резервный фонд на 3-6 месяцев расходов. Цель: финансовая стабильность",
+        "status": "active",
+        "metrics": { "current": 0, "target": 6, "trend": "stable", "unit": "месяцев" }
+      }
+    },
+    {
+      "id": "node-invest",
+      "type": "processNode",
+      "position": { "x": 800, "y": 200 },
+      "data": {
+        "label": "Инвестиции",
+        "emoji": "📈",
+        "category": "amplifier",
+        "color": "#8b5cf6",
+        "description": "Долгосрочное наращивание капитала: акции, крипта, недвижимость, бизнес",
+        "status": "active",
+        "metrics": { "current": 0, "target": 20, "trend": "stable", "unit": "% от дохода" }
+      }
+    },
+    {
+      "id": "node-wealth",
+      "type": "processNode",
+      "position": { "x": 1050, "y": 200 },
+      "data": {
+        "label": "Капитал",
+        "emoji": "💎",
+        "category": "output",
+        "color": "#10b981",
+        "description": "Чистая стоимость активов минус долги. Цель: финансовая свобода",
+        "status": "active"
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "e-income-budget",
+      "source": "node-income",
+      "target": "node-budget",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 4, "flowVolume": 80, "animated": true }
+    },
+    {
+      "id": "e-budget-expenses",
+      "source": "node-budget",
+      "target": "node-expenses",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 5, "flowVolume": 50, "animated": true, "label": "50%" }
+    },
+    {
+      "id": "e-budget-savings",
+      "source": "node-budget",
+      "target": "node-savings",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 30, "animated": true, "label": "30%" }
+    },
+    {
+      "id": "e-budget-invest",
+      "source": "node-budget",
+      "target": "node-invest",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 3, "flowVolume": 20, "animated": true, "label": "20%" }
+    },
+    {
+      "id": "e-invest-wealth",
+      "source": "node-invest",
+      "target": "node-wealth",
+      "sourceHandle": "right-out",
+      "targetHandle": "left-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 2, "flowVolume": 40, "animated": true }
+    },
+    {
+      "id": "e-savings-invest",
+      "source": "node-savings",
+      "target": "node-invest",
+      "sourceHandle": "right-out",
+      "targetHandle": "bottom-in",
+      "type": "animatedEdge",
+      "data": { "flowSpeed": 1, "flowVolume": 15, "animated": true, "label": "Излишки" }
+    }
+  ],
+  "tasks": [],
+  "createdAt": "2026-02-09T00:00:00.000Z",
+  "updatedAt": "2026-02-09T00:00:00.000Z",
+  "version": "0.1",
+  "kanbanColumns": []
+}

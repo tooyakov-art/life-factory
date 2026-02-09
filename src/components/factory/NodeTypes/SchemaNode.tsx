@@ -128,7 +128,7 @@ function SchemaNodeComponent({ id, data, selected }: NodeProps<FactoryNode>) {
             e.stopPropagation()
             handleOpen()
           }}
-          className="mt-2 w-full text-center text-[11px] font-medium py-1 rounded-md transition-colors"
+          className="nodrag mt-2 w-full text-center text-[11px] font-medium py-1 rounded-md transition-colors cursor-pointer"
           style={{
             backgroundColor: `${data.color as string}25`,
             color: data.color as string,

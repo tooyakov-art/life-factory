@@ -168,8 +168,8 @@ function KaizenNodeComponent({ id, selected }: NodeProps<FactoryNode>) {
   const [showPassed, setShowPassed] = useState(false)
   const [allCopied, setAllCopied] = useState(false)
 
-  // Исключаем саму кайдзен-ноду из анализа
-  const analysisNodes = useMemo(() => nodes.filter((n) => n.type !== 'kaizenNode'), [nodes])
+  // Исключаем служебные ноды (кайдзен, канбан) из анализа
+  const analysisNodes = useMemo(() => nodes.filter((n) => n.type !== 'kaizenNode' && n.type !== 'kanbanNode'), [nodes])
   const results = useMemo(() => analyzeKaizen(analysisNodes, edges), [analysisNodes, edges])
   const stats = useMemo(() => getKaizenScore(results), [results])
 
